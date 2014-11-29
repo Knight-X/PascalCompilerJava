@@ -1,17 +1,19 @@
 package wci.frontend;
 
-import java.io.BufferReader;
+import java.io.BufferedReader;
 import java.io.IOException;
 
 import wci.message.*;
+import wci.message.MessageHandler;
+
 import static wci.message.MessageType.SOURCE_LINE;
 
 public class Source implements MessageProducer
 {
-  public sataic findal char EOL = '\n';
+  public static final char EOL = '\n';
   public static final char EOF = (char) 0;
 
-  private BufferReader reader;
+  private BufferedReader reader;
   private String line;
 
   private int lineNum;
@@ -20,13 +22,12 @@ public class Source implements MessageProducer
   private MessageHandler messageHandler;
 
 
-  public Source(BufferReader reader)
+  public Source(BufferedReader reader)
     throws IOException
   {
     this.lineNum = 0;
     this.currentPos = -2;
     this.reader = reader;
-
     this.messageHandler = new MessageHandler();
 
   }
@@ -42,7 +43,7 @@ public class Source implements MessageProducer
   }
 
   public char currentChar()
-    throws Excpetion
+    throws Exception
   {
     if (currentPos == -2) {
         readLine();
@@ -120,7 +121,7 @@ public class Source implements MessageProducer
          throw ex;
        }
     }
-   }
+ }
 
 
    public void addMessageListener(MessageListener listener)
@@ -139,4 +140,4 @@ public class Source implements MessageProducer
     messageHandler.sendMessage(message);
   }
 }
- }
+ 

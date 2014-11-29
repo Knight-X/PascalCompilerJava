@@ -1,7 +1,7 @@
 package wci.frontend.pascal;
-
 import wci.frontend.*;
 import wci.message.Message;
+import wci.frontend.Parser;
 
 import static wci.message.MessageType.PARSER_SUMMARY;
 
@@ -9,7 +9,7 @@ public class PascalParserTD extends Parser
 {
   public PascalParserTD(Scanner scanner)
   {
-    supper(scanner);
+    super(scanner);
   }
 
   public void parse() 

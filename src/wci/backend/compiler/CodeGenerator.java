@@ -1,5 +1,6 @@
 package wci.backend.compiler;
 
+
 import wci.backend.*;
 import wci.intermediate.ICode;
 import wci.intermediate.SymTab;
@@ -12,8 +13,8 @@ public class CodeGenerator extends Backend
   public void process(ICode iCode, SymTab symTab)
     throws Exception
   {
-    long startTime = System.currentTimeMills();
-    float elapsedTime = (System.currentTimeMills() - startTime) / 1000f;
+    long startTime = System.currentTimeMillis();
+    float elapsedTime = (System.currentTimeMillis() - startTime) / 1000f;
    
     int instructionCount = 0;
 

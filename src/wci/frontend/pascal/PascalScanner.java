@@ -1,6 +1,9 @@
 package wci.frontend.pascal;
 
 import wci.frontend.*;
+import wci.frontend.Scanner;
+import wci.frontend.Token;
+
 import static wci.frontend.Source.EOF;
 
 public class PascalScanner extends Scanner

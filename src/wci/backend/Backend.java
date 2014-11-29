@@ -9,7 +9,7 @@ public abstract class Backend implements MessageProducer
   protected static MessageHandler messageHandler;
 
   static {
-    messageHandle = new MessageHandler();
+    messageHandler = new MessageHandler();
   }
 
   protected SymTab symTab;

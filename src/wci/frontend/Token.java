@@ -1,5 +1,6 @@
 package wci.frontend;
 
+import wci.frontend.*;
 
 public class Token
 {
