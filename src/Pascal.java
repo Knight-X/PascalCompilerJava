@@ -136,11 +136,19 @@ public class Pascal
             }
         }
     }
+    
+    private static final String TOKEN_FORMAT = 
+      ">>> %-15s line=%03d, pos=%2d, text=\"%s\"";
 
+    private static final String VALUE_FORMAT =
+      ">>>               value=%s";
     private static final String PARSER_SUMMARY_FORMAT =
         "\n%,20d source lines." +
         "\n%,20d syntax errors." +
         "\n%,20.2f seconds total parsing time.\n";
+
+
+    private static final int PREFIX_WIDTH = 5;
 
     /**
      * Listener for parser messages.
@@ -156,6 +164,31 @@ public class Pascal
             MessageType type = message.getType();
 
             switch (type) {
+
+                case TOKEN: {
+                   Object body[] = (Object [])message.getBody();
+                   int line = (Integer)body[0];
+                   int position = (Integer)body[1];
+                   TokenType tokenType = (TokenType)body[2];
+                   String tokenText = (String)body[3];
+                   Object tokenValue = body[4];
+
+                   System.out.println(String.format(TOKEN_FORMAT,
+                                                    tokenType, 
+                                                    line,
+                                                    position,
+                                                    tokenText));
+                   
+                   if (tokenValue != null) {
+                     if (tokenType == STRING) {
+                       tokenValue = "\"" + tokenValue + "\"";
+                     }
+
+                     System.out.println(String.format(VALUE_FORMAT,
+                                                      tokenValue));
+                   }
+                  break;
+                }
 
                 case PARSER_SUMMARY: {
                     Number body[] = (Number[]) message.getBody();
