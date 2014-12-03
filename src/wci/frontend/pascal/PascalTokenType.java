@@ -17,16 +17,16 @@ public enum PascalTokenType implements TokenType
   EQUALS("="), NOT_EQUALS("<>"), LESS_THAN("<"), LESS_EQUALS("<="),
   GREATER_EQUALS(">="), GREATER_THEN(">"), LEFT_PAREN("("), RIGHT_PAREN("]"),
   LEFT_BRACKET("["), RIGHT_BRACKET("]"), LEFT_BRACE("{"), RIGHT_BRACE("}"),
-  UP_ARROW("^"), DOT_DOT("..")
+  UP_ARROW("^"), DOT_DOT(".."),
 
   IDENTIFIER, INTEGER, REAL, STRING,
   ERROR, END_OF_FILE;
 
-  private static final int FIRST_RESERVED_INDEX = AND.ordianl();
+  private static final int FIRST_RESERVED_INDEX = AND.ordinal();
   private static final int LAST_RESERVED_INDEX = WITH.ordinal();
 
   private static final int FIRST_SPECIAL_INDEX = PLUS.ordinal();
-  private static final int LAST_SPECIAL_IDEX = DOT_DOT.ordinal();
+  private static final int LAST_SPECIAL_INDEX = DOT_DOT.ordinal();
 
   private String text;
 
@@ -53,12 +53,12 @@ public enum PascalTokenType implements TokenType
     }
   }
 
-  public static HashTable<String, PascalTokenType> SPECIAL_SYMBOLS = 
+  public static Hashtable<String, PascalTokenType> SPECIAL_SYMBOLS = 
     new Hashtable<String, PascalTokenType>();
   static {
     PascalTokenType values[] =  PascalTokenType.values();
     for (int i = FIRST_SPECIAL_INDEX; i <= LAST_SPECIAL_INDEX; ++i) {
-      SPECIAL_SYMBOLS.put(values[i].getText(), values[i])
+      SPECIAL_SYMBOLS.put(values[i].getText(), values[i]);
     }
   }
 }

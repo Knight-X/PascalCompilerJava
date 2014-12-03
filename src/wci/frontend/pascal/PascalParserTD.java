@@ -36,7 +36,7 @@ public class PascalParserTD extends Parser
                                       token.getText(),
                                       token.getValue()}));
         } else {
-           errorHandler.flag(token, (PascalErrorCode)token.getValue, this);
+           errorHandler.flag(token, (PascalErrorCode)token.getValue(), this);
         }
 
         

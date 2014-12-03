@@ -13,6 +13,7 @@ import wci.backend.interpreter.Excutor;
 import wci.backend.compiler.CodeGenerator;
 
 import static wci.message.MessageType.*;
+import static wci.frontend.pascal.PascalTokenType.STRING;
 
 /**
  * <h1>Pascal</h1>
@@ -189,7 +190,28 @@ public class Pascal
                    }
                   break;
                 }
+                case SYNTAX_ERROR: {
+                  Object body[] = (Object [])message.getBody();
+                  int lineNumber = (Integer)body[0];
+                  int position = (Integer) body[1];
+                  String tokenText = (String) body[2];
+                  String errorMessage = (String) body[3];
 
+                  int spaceCount = PREFIX_WIDTH + position;
+                  StringBuilder flagBuffer = new StringBuilder();
+
+                  for (int i = 1; i < spaceCount; ++i){
+                    flagBuffer.append(' ');
+                  }
+                  flagBuffer.append("^\n*** ").append(errorMessage);
+
+                  if (tokenText != null){
+                    flagBuffer.append(" [at \"").append(tokenText).append("\"]");
+                  }
+
+                  System.out.println(flagBuffer.toString());
+                  break;
+                }
                 case PARSER_SUMMARY: {
                     Number body[] = (Number[]) message.getBody();
                     int statementCount = (Integer) body[0];

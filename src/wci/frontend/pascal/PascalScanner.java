@@ -4,7 +4,11 @@ import wci.frontend.*;
 import wci.frontend.Scanner;
 import wci.frontend.Token;
 
+import wci.frontend.pascal.tokens.*;
+
 import static wci.frontend.Source.EOF;
+import static wci.frontend.pascal.PascalTokenType.*;
+import static wci.frontend.pascal.PascalErrorCode.*;
 
 public class PascalScanner extends Scanner
 {
@@ -21,8 +25,9 @@ public class PascalScanner extends Scanner
 
     if (currentChar == EOF) {
 	token = new EofToken(source);
-    } else {
-        token = new Token(source);
+    } else if (Character.isLetter(currentChar)) {
+        token = new PascalWordToken(source);
+        
     }
 
     return token;
