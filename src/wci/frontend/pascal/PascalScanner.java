@@ -36,6 +36,7 @@ public class PascalScanner extends Scanner
     else
       {
       token = new PascalErrorToken(source, INVALID_CHARACTER, Character.toString(currentChar));
+      nextChar();
     }
 
     return token;
@@ -52,7 +53,7 @@ public class PascalScanner extends Scanner
               currentChar = nextChar();
             } while ((currentChar != '}') && (currentChar != EOF));
 
-            if (currentChar == '{') {
+            if (currentChar == '}') {
               currentChar = nextChar();
             }
           }
