@@ -5,10 +5,11 @@ import wci.frontend.pascal.*;
 
 
 import static wci.frontend.pascal.PascalTokenType.*;
+import static wci.frontend.pascal.PascalErrorCode.*;
 
 public class PascalErrorToken extends PascalToken
 {
-  public PascalErrorToken(Source source, PascalErrorCode erroCode,
+  public PascalErrorToken(Source source, PascalErrorCode errorCode,
 			String tokenText)
     throws Exception
   {

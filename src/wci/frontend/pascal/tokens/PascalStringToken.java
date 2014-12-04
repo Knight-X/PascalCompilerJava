@@ -18,6 +18,7 @@ public class PascalStringToken extends PascalToken
   }
 
   protected void extract()
+    throws Exception
   { 
 
     StringBuilder textBuffer = new StringBuilder();
@@ -45,7 +46,7 @@ public class PascalStringToken extends PascalToken
           currentChar = nextChar();
         }
       }
-    } while ((currenChar != '\'') && (currentChar != EOF));
+    } while ((currentChar != '\'') && (currentChar != EOF));
 
     if (currentChar == '\'') {
       nextChar();

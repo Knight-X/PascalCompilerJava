@@ -80,7 +80,7 @@ public class PascalSpecialSymbolToken extends PascalToken
       break;
     }
 
-    defalut: {
+    default: {
       nextChar();
       type = ERROR;
       value = INVALID_CHARACTER;

@@ -5,8 +5,6 @@ import wci.frontend.Parser;
 
 import static wci.frontend.pascal.PascalTokenType.*;
 import static wci.frontend.pascal.PascalErrorCode.*;
-
-import static wci.message.MessageType.PARSER_SUMMARY;
 import static wci.message.MessageType.*;
 
 public class PascalParserTD extends Parser

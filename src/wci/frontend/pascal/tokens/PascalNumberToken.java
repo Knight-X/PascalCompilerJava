@@ -20,12 +20,13 @@ public class PascalNumberToken extends PascalToken
   protected void extract()
     throws Exception
   {
-    StringBuilder textBuilder = new StringBuilder();
+    StringBuilder textBuffer = new StringBuilder();
     extractNumber(textBuffer);
     text = textBuffer.toString();
   }
 
-  protected void extractNumber(StringBuiler textBuffer)
+  protected void extractNumber(StringBuilder textBuffer)
+      throws Exception
   {
     String wholeDigits = null;
     String fractionDigits = null;
@@ -169,7 +170,7 @@ public class PascalNumberToken extends PascalToken
 
     int index = 0;
     while (index < digits.length()) {
-      floatValue = 10 * floatValue + Character.getNumericValue(digits.charAt(idenx++));
+      floatValue = 10 * floatValue + Character.getNumericValue(digits.charAt(index++));
 
     }
 
