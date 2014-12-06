@@ -1,11 +1,12 @@
 package wci.frontend.pascal;
 import wci.frontend.*;
-import wci.message.Message;
-import wci.frontend.Parser;
+import wci.message.*;
+import wci.intermediate.*;
 
 import static wci.frontend.pascal.PascalTokenType.*;
 import static wci.frontend.pascal.PascalErrorCode.*;
-import static wci.message.MessageType.*;
+import static wci.intermediate.symtabimpl.SymTabKeyImpl.*;
+import static wci.message.MessageType.PARSER_SUMMARY;
 
 public class PascalParserTD extends Parser
 {
@@ -26,14 +27,17 @@ public class PascalParserTD extends Parser
       while (!((token = nextToken()) instanceof EofToken)) {
         TokenType tokenType = token.getType();
 
-        if (tokenType != ERROR) {
-          sendMessage(new Message(TOKEN,
-                        new Object[] {token.getLineNumber(),
-                                      token.getPosition(),
-                                      tokenType,
-                                      token.getText(),
-                                      token.getValue()}));
-        } else {
+        if (tokenType == IDENTIFIER) {
+            String name = token.getText().toLowerCase();
+
+            SymTabEntry entry = symTabStack.lookup(name);
+
+            if (entry == null) {
+              entry = symTabStack.enterLocal(name);
+            }
+
+            entry.appendLineNumber(token.getLineNumber());
+        } else if (tokenType == ERROR){
            errorHandler.flag(token, (PascalErrorCode)token.getValue(), this);
         }
 
