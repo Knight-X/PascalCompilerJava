@@ -51,14 +51,14 @@ public class Pascal
             source.close();
 			
             iCode = parser.getICode();
-            symTab = parser.getSymTabStack();
+            symTabStack = parser.getSymTabStack();
 
             if (xref) {
-              CrossReferencer crossReferencer = new CrossReference();
-              crossReference.print(symTabStack);
+              CrossReferencer crossReferencer = new CrossReferencer();
+              crossReferencer.print(symTabStack);
             }
 
-            backend.process(iCode, symTab);
+            backend.process(iCode, symTabStack);
         }
         catch (Exception ex) {
             System.out.println("***** Internal translator error. *****");
@@ -165,7 +165,7 @@ public class Pascal
                    int syntaxErrors = (Integer)body[1];
                    float elapsedTime = (Float)body[2];
 
-                   System.out.println(PARSER_SUMMARY_FORMAT,
+                   System.out.printf(PARSER_SUMMARY_FORMAT,
                                                     statementCount, 
                                                     syntaxErrors,
                                                     elapsedTime);

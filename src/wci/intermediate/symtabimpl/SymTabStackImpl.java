@@ -33,6 +33,11 @@ public class SymTabStackImpl
       return get(currentNestingLevel).enter(name);
     }
 
+    public SymTabEntry lookupLocal(String name)
+    {
+        return get(currentNestingLevel).lookup(name);
+    }
+
     public SymTabEntry lookup(String name)
     {
       return lookupLocal(name);

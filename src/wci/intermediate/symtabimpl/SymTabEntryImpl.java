@@ -32,7 +32,7 @@ public class SymTabEntryImpl
       return symTab;
     }
 
-    public void appenLineNumber(int lineNumber)
+    public void appendLineNumber(int lineNumber)
     {
 
       lineNumbers.add(lineNumber);

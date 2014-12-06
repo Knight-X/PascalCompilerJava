@@ -16,10 +16,10 @@ public class CrossReferencer
   private static final String NUMBERS_UNDERLINE = " --------  ";
   private static final String NUMBER_FORMAT = " %03d";
 
-  private static final int LABEL_FORMAT = NUMBERS_LABEL.length();
+  private static final int LABEL_WIDTH = NUMBERS_LABEL.length();
   private static final int INDENT_WIDTH = NAME_WIDTH + LABEL_WIDTH;
 
-  private static final StringBuilder IDENT = new StringBuilder(INDENT_WIDTH);
+  private static final StringBuilder INDENT = new StringBuilder(INDENT_WIDTH);
 
   static {
      for (int i = 0; i < INDENT_WIDTH; ++i) INDENT.append(" ");

@@ -41,7 +41,7 @@ public class SymTabImpl
   {
     Collection<SymTabEntry> entries = values();
 
-    Interator<SymTabEntry> iter = entries.iterator();
+    Iterator<SymTabEntry> iter = entries.iterator();
     ArrayList<SymTabEntry> list = new ArrayList<SymTabEntry>(size());
 
     while (iter.hasNext()) {

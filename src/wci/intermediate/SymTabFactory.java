@@ -6,7 +6,7 @@ public class SymTabFactory
 {
   public static SymTabStack createSymTabStack()
   {
-    return SymTabStackImpl();
+    return new SymTabStackImpl();
   }
 
   public static SymTab createSymTab(int nestingLevel)
