@@ -6,13 +6,13 @@ import wci.message.*;
 
 public abstract class Backend implements MessageProducer
 {
+  protected static SymTabStack symTabStack;
   protected static MessageHandler messageHandler;
 
   static {
     messageHandler = new MessageHandler();
   }
 
-  protected SymTab symTab;
   protected ICode iCode;
 
   public ICode getICode()
@@ -20,9 +20,9 @@ public abstract class Backend implements MessageProducer
     return iCode;
   }
 
-  public SymTab getSymTab()
+  public SymTabStack getSymTabStack()
   {
-    return symTab;
+    return symTabStack;
   }
 
   public MessageHandler getMessageHandler()
@@ -53,4 +53,4 @@ public abstract class Backend implements MessageProducer
 }
 
     
-    
+
