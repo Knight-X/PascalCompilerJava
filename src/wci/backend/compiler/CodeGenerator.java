@@ -3,14 +3,14 @@ package wci.backend.compiler;
 
 import wci.backend.*;
 import wci.intermediate.ICode;
-import wci.intermediate.SymTab;
+import wci.intermediate.SymTabStack;
 import wci.message.*;
 
 import static wci.message.MessageType.COMPILER_SUMMARY;
 
 public class CodeGenerator extends Backend
 {
-  public void process(ICode iCode, SymTab symTab)
+  public void process(ICode iCode, SymTabStack symTabStack)
     throws Exception
   {
     long startTime = System.currentTimeMillis();

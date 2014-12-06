@@ -2,7 +2,7 @@ package wci.backend.interpreter;
 
 import wci.backend.*;
 import wci.intermediate.ICode;
-import wci.intermediate.SymTab;
+import wci.intermediate.SymTabStack;
 import wci.message.*;
 
 
@@ -10,7 +10,7 @@ import static wci.message.MessageType.INTERPRETER_SUMMARY;
 
 public class Excutor extends Backend
 {
-  public void process(ICode iCode, SymTab symTab)
+  public void process(ICode iCode, SymTabStack symTabStack)
   throws Exception
   {
     long startTime = System.currentTimeMillis();

@@ -1,7 +1,7 @@
 package wci.backend;
 
 import wci.intermediate.ICode;
-import wci.intermediate.SymTab;
+import wci.intermediate.SymTabStack;
 import wci.message.*;
 
 public abstract class Backend implements MessageProducer
@@ -30,7 +30,7 @@ public abstract class Backend implements MessageProducer
     return messageHandler;
   }
 
-  public abstract void process(ICode iCode, SymTab symTab)
+  public abstract void process(ICode iCode, SymTabStack symTabStack)
     throws Exception;
   
 
