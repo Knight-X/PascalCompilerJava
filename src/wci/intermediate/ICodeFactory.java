@@ -1,7 +1,7 @@
 package wci.intermediate;
 
 import wci.intermediate.icodeimpl.ICodeImpl;
-import wci.intermedidate.icodeimpl.ICodeNodeImpl;
+import wci.intermediate.icodeimpl.ICodeNodeImpl;
 
 public class ICodeFactory
 {
