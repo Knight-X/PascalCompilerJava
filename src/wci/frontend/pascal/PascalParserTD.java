@@ -1,5 +1,6 @@
 package wci.frontend.pascal;
 import wci.frontend.*;
+import wci.frontend.pascal.parsers.*;
 import wci.message.*;
 import wci.intermediate.*;
 
@@ -20,29 +21,30 @@ public class PascalParserTD extends Parser
   public void parse() 
     throws Exception
   {
-    Token token;
+    
     long startTime = System.currentTimeMillis();
+    iCode = ICodeFactory.createICode();
 
     try{
-      while (!((token = nextToken()) instanceof EofToken)) {
-        TokenType tokenType = token.getType();
+        Token token = nextToken();
+        ICodeNode rootNode = null;
 
-        if (tokenType == IDENTIFIER) {
-            String name = token.getText().toLowerCase();
-
-            SymTabEntry entry = symTabStack.lookup(name);
-
-            if (entry == null) {
-              entry = symTabStack.enterLocal(name);
-            }
-
-            entry.appendLineNumber(token.getLineNumber());
-        } else if (tokenType == ERROR){
-           errorHandler.flag(token, (PascalErrorCode)token.getValue(), this);
+        if (token.getType() == BEGIN) {
+            StatementParser statementParser = new StatementParser(); 
+            rootNode = statementParser.parse(token);
+            token = currentToken();
+        } else {
+            errorHandler.flag(token, UNEXPECTED_TOKEN, this);
         }
 
-        
-      }
+            if (token.getType() != DOT) {
+              errorHandler.flag(token, MISSING_PERIOD, this);
+        }
+          token = currentToken();
+          
+       if (rootNode != null){
+           iCode.setRoot(rootNode);
+        }
 
      float elapsedTime = (System.currentTimeMillis() - startTime ) / 1000f;
 

@@ -6,7 +6,7 @@ import wci.intermediate.icodeimpl.ICodeNodeImpl;
 public class ICodeFactory
 {
 
-  public static ICode createCode()
+  public static ICode createICode()
   {
 
     return new ICodeImpl();
