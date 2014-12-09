@@ -63,9 +63,9 @@ public class ICodeNodeImpl
 
   public ICodeNode copy() 
   {
-    ICodeNodeImpl copy = (ICodeNodeImpl) ICodeFactory.creteICodeNode(type);
+    ICodeNodeImpl copy = (ICodeNodeImpl) ICodeFactory.createICodeNode(type);
 
-    Set<Map.Entry<ICodeKey, Object> attributes = entrySet();
+    Set<Map.Entry<ICodeKey, Object>> attributes = entrySet();
     Iterator<Map.Entry<ICodeKey, Object>> it = attributes.iterator();
 
     while (it.hasNext()) {
