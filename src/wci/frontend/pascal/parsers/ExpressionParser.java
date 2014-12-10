@@ -31,7 +31,7 @@ public class ExpressionParser extends StatementParser
       REL_OPS_MAP.put(LESS_THAN, LT);
       REL_OPS_MAP.put(LESS_EQUALS, LE);
       REL_OPS_MAP.put(GREATER_THAN, GT);
-      REL_OPS_MAP.Put(GREATER_EQUALS, GE);
+      REL_OPS_MAP.put(GREATER_EQUALS, GE);
     };
 
     private ICodeNode parseExpression(Token token)

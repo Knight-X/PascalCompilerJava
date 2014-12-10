@@ -30,7 +30,7 @@ public class PascalParserTD extends Parser
         ICodeNode rootNode = null;
 
         if (token.getType() == BEGIN) {
-            StatementParser statementParser = new StatementParser(); 
+            StatementParser statementParser = new StatementParser(this); 
             rootNode = statementParser.parse(token);
             token = currentToken();
         } else {
