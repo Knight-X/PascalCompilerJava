@@ -57,7 +57,10 @@ public class ExpressionParser extends StatementParser
       return rootNode;
      }
 
-     private static final EnumSet<PascalTokenType> ADD_OPS = EnumSet.of(PLUS, MMINUS, PascalTokenType.OR);
+     private static final EnumSet<PascalTokenType> ADD_OPS = EnumSet.of(PLUS, MINUS, PascalTokenType.OR);
+
+     private static final HashMap<PascalTokenType, ICodeNodeTypeImpl> ADD_OPS_OPS_MAP =
+       new HashMap<PascalTokenType, ICodeNodeTypeImpl>();
 
      static {
        ADD_OPS_OPS_MAP.put(PLUS, ADD);

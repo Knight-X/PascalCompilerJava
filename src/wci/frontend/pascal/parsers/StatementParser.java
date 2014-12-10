@@ -17,6 +17,7 @@ public class StatementParser extends PascalParserTD
   }
 
   public ICodeNode parse(Token token)
+    throws Exception
   {
     ICodeNode statementNode = null;
 
@@ -48,7 +49,7 @@ public class StatementParser extends PascalParserTD
   protected void setLineNumber(ICodeNode node, Token token)
   {
     if (node != null) {
-      node.setAttribute(LINE, token.getLineNumber9);
+      node.setAttribute(LINE, token.getLineNumber());
     }
   }
 
