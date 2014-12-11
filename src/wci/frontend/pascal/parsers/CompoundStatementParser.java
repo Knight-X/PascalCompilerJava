@@ -17,6 +17,7 @@ public class CompoundStatementParser extends StatementParser
   }
 
   public ICodeNode parse(Token token)
+    throws Exception
   {
     token = nextToken();
 

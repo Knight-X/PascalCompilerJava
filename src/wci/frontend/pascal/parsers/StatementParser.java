@@ -63,7 +63,7 @@ public class StatementParser extends PascalParserTD
       parentNode.addChild(statementNode);
     
       token = currentToken();
-      TokentType tokentype = token.getType();
+      TokenType tokenType = token.getType();
 
       if (tokenType == SEMICOLON) {
         token = nextToken();
@@ -74,7 +74,7 @@ public class StatementParser extends PascalParserTD
       }
 
       else if (tokenType != terminator) {
-        errorHanlder.flag(token, UNEXPECTED_TOKEN, this);
+        errorHandler.flag(token, UNEXPECTED_TOKEN, this);
         token = nextToken();
       }
 
@@ -83,7 +83,7 @@ public class StatementParser extends PascalParserTD
    if (token.getType() == terminator) {
        token = nextToken();
    } else {
-      errorHanlder.flag(token, errorCode, this);
+      errorHandler.flag(token, errorCode, this);
    }
  }
 }

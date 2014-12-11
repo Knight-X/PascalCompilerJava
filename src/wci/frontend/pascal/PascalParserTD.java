@@ -18,6 +18,11 @@ public class PascalParserTD extends Parser
     super(scanner);
   }
 
+  public PascalParserTD(PascalParserTD parent)
+  {
+    super(parent.getScanner());
+  }
+
   public void parse() 
     throws Exception
   {

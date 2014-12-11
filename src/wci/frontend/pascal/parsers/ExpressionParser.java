@@ -21,7 +21,7 @@ public class ExpressionParser extends StatementParser
       super(parent);
     }
 
-    private static final EnumSet<PascalTokenType> REL_OPS = EnumSet.of(GREATER_THAN, GREATER_EQUALS);
+    private static final EnumSet<PascalTokenType> REL_OPS = EnumSet.of(EQUALS, NOT_EQUALS, LESS_THAN, LESS_EQUALS, GREATER_THAN, GREATER_EQUALS);
 
     private static final HashMap<PascalTokenType, ICodeNodeType> REL_OPS_MAP = new HashMap<PascalTokenType, ICodeNodeType>();
 
@@ -173,7 +173,7 @@ public class ExpressionParser extends StatementParser
         SymTabEntry id = symTabStack.lookup(name);
 
         if (id == null) {
-          errorHanlder.flag(token, IDENTIFIER_UNDEFINED, this);
+          errorHandler.flag(token, IDENTIFIER_UNDEFINED, this);
           id = symTabStack.enterLocal(name);
 
         }
@@ -230,7 +230,7 @@ public class ExpressionParser extends StatementParser
          if (token.getType() == RIGHT_PAREN) {
             token = nextToken();
          } else {
-            errorHanlder.flag(token, MISSING_RIGHT_PAREN, this);
+            errorHandler.flag(token, MISSING_RIGHT_PAREN, this);
          }
 
          break;
