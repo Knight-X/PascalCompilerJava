@@ -33,4 +33,62 @@ public class ParseTreePrinter
     for (int i = 0; i < INDENT_WIDTH; ++i) {
       this.indent += " ";
     }
+  
   }
+
+  public void print(ICode iCode)
+  {
+    ps.println("\n====== INTERMEDIATE CODE ======\n");
+
+    printNode((ICodeNodeImpl) iCode.getRoot());  
+    printLine();
+  }
+
+  private void printNode(ICodeNodeImpl node)
+  {
+    append(indentation);
+    append("<" + node.toString());
+
+    printAttributes(node);
+    printTypeSpec(node);
+
+    ArrayList<ICodeNode> childNodes = node.getChildren();
+
+    if ((childNodes != null) && (childNodes.size() > 0)) {
+      append(">");
+      printLine();
+ 
+      printChildNodes(childNodes);
+      append(indentation);
+      append("</" + node.toString() + ">");
+
+    }
+
+    else {
+      append(" ");
+      append("/>");
+    }
+
+    printLine();
+  }
+
+
+  private void printAttributes(ICodeNodeImpl node)
+  {
+    String saveIndentation = indentation;
+
+    identation += ident;
+
+    Set<Map.Entry<ICodeKey, Object> attributes = node.entrySet();
+
+    Iterator<Map.Entry<ICodeKey, Object>> it = attributes.iterator();
+
+    while (it.hasNext()) {
+      Map.Entry<ICodeKey, Object> attribute = it.next();
+      printAttribute(attribute.getKey().toString(), attribute.getValue());
+    }
+
+    identation = saveIndentation;
+  }
+
+  
