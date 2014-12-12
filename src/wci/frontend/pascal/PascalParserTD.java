@@ -47,7 +47,7 @@ public class PascalParserTD extends Parser
         }
           token = currentToken();
           
-       if (rootNode != null){
+    if (rootNode != null){
            iCode.setRoot(rootNode);
         }
 
