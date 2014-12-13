@@ -231,6 +231,33 @@ public class Pascal
 
             switch (type) {
 
+                case ASSIGN: {
+                  if (firstOutputMessage){
+                      System.out.println("\n==== OUTPUT ====\n");
+                      firstOutputMessage = false;
+                }
+
+                Object body[] = (Object [])message.getBody();
+                int lineNumbeer = (Integer) body[0];
+                String variableName = (String) body[1];
+                Object value = body[2];
+
+                System.out.println(ASSIGN_FORMAT, lineNumber, variableName, value);
+                break;
+            }
+
+                case RUNTIME_ERROR: {
+                    Object body[] = (Object []) message.getBody();
+                    String errorMessage = (String) body[0];
+                    Integer lineNumber = (Integer) body[1];
+
+                    System.out.println("*** RUNTIME ERROR");
+                    if (lineNumber != null){
+                        System.out.print(" At Line " + String.format("%03d", lineNumber));
+                    }
+                    System.out.println(": " + errorMessage);
+                    break;
+                }
                 case INTERPRETER_SUMMARY: {
                     Number body[] = (Number[]) message.getBody();
                     int executionCount = (Integer) body[0];
