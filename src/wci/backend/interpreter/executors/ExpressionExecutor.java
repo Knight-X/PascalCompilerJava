@@ -8,7 +8,7 @@ import wci.intermediate.icodeimpl.*;
 import wci.backend.interpreter.*;
 
 import static wci.intermediate.symtabimpl.SymTabKeyImpl.*;
-import static wci.intermediate.icodeimpl.ICodeNodeImpl.*;
+import static wci.intermediate.icodeimpl.ICodeNodeTypeImpl.*;
 import static wci.intermediate.icodeimpl.ICodeKeyImpl.*;
 import static wci.backend.interpreter.RuntimeErrorCode.*;
 
@@ -19,7 +19,7 @@ public class ExpressionExecutor extends StatementExecutor
     super(parent); 
   }
 
-  public Objeect execute(ICodeNode node)
+  public Object execute(ICodeNode node)
   {
     ICodeNodeTypeImpl nodeType = (ICodeNodeTypeImpl) node.getType();
 
@@ -69,9 +69,9 @@ public class ExpressionExecutor extends StatementExecutor
     }
   }
 
-  private static final EnumSet<ICodeNodeTypeImpl> ARITH_OPS = EnumSet.of(ADD, SUBSTRACT, MULTIPLY, FLOAT_DIVIDE, INTEGER_DIVIDE, MOD);
+  private static final EnumSet<ICodeNodeTypeImpl> ARITH_OPS = EnumSet.of(ADD, SUBTRACT, MULTIPLY, FLOAT_DIVIDE, INTEGER_DIVIDE, MOD);
 
-  private Object executeBinaryOperator(ICodeNode node, ICodeNodeTypeIMpl nodeType)
+  private Object executeBinaryOperator(ICodeNode node, ICodeNodeTypeImpl nodeType)
   {
     ArrayList<ICodeNode> children = node.getChildren();
     ICodeNode operandNode1 = children.get(0);
@@ -173,7 +173,7 @@ public class ExpressionExecutor extends StatementExecutor
     }
     else {
        float value1 = operand1 instanceof Integer ? (Integer) operand1 : (Float) operand1;
-       float value2 = oeprand2 instanceof Integer ? (Integer) operand2 : (Float) oeprand2;
+       float value2 = operand2 instanceof Integer ? (Integer) operand2 : (Float) operand2;
 
        switch (nodeType) {
          case EQ: return value1 == value2;

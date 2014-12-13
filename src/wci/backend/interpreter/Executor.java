@@ -1,14 +1,16 @@
 package wci.backend.interpreter;
 
 import wci.backend.*;
-import wci.intermediate.ICode;
-import wci.intermediate.SymTabStack;
+import wci.intermediate.icodeimpl.*;
+import  wci.intermediate.*;
+import wci.backend.interpreter.executors.*;
 import wci.message.*;
 
-
+import static wci.intermediate.icodeimpl.ICodeNodeTypeImpl.*;
 import static wci.message.MessageType.INTERPRETER_SUMMARY;
 
-public class Excutor extends Backend
+
+public class Executor extends Backend
 {
 
   protected static int executionCount;
@@ -37,9 +39,11 @@ public class Excutor extends Backend
     this.symTabStack = symTabStack;
     this.iCode = iCode;
 
+    long startTime = System.currentTimeMillis();
+
     ICodeNode rootNode = iCode.getRoot();
-    StatementExecutor statementExecutor = new StatementExecutor();
-    statementExecutor.executor(rootNode);
+    StatementExecutor statementExecutor = new StatementExecutor(this);
+    statementExecutor.execute(rootNode);
 
     float elapsedTime = (System.currentTimeMillis() - startTime) / 1000f;
 
@@ -51,19 +55,4 @@ public class Excutor extends Backend
                               elapsedTime}));
    }
 }
-  public void process(ICode iCode, SymTabStack symTabStack)
-  throws Exception
-  {
-    long startTime = System.currentTimeMillis();
-    float elapsedTime = (System.currentTimeMillis() - startTime) / 1000f;
 
-    int executionCount = 0;
-    int runtimeErrors = 0;
-
-    sendMessage(new Message(INTERPRETER_SUMMARY,
-                new Number[] {
-                              executionCount,
-			      runtimeErrors,
-			      elapsedTime}));
-   }
-}

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import wci.intermediate.*;
 import wci.backend.interpreter.*;
 
-public class CompoundEexcutor extends StatementExcutor
+public class CompoundExecutor extends StatementExecutor
 {
 
   public CompoundExecutor(Executor parent)

@@ -2,7 +2,7 @@ package wci.backend;
 
 import wci.backend.compiler.CodeGenerator;
 
-import wci.backend.interpreter.Excutor;
+import wci.backend.interpreter.Executor;
 
 
 public class BackendFactory
@@ -15,7 +15,7 @@ public class BackendFactory
     if (operation.equalsIgnoreCase("compile")) {
       return new CodeGenerator();
     }else if (operation.equalsIgnoreCase("execute")){
-      return new Excutor();
+      return new Executor();
     } else {
         throw new Exception("Backend Factory: Invalid OPERATION '" + operation + "'");
     }

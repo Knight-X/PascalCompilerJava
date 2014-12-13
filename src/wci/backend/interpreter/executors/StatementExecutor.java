@@ -13,7 +13,7 @@ import static wci.message.MessageType.SOURCE_LINE;
 public class StatementExecutor extends Executor
 {
 
-  pbulic StatementExecutor(Executor parent)
+  public StatementExecutor(Executor parent)
   { 
 
     super(parent);
@@ -27,7 +27,7 @@ public class StatementExecutor extends Executor
 
     switch (nodeType) {
       case COMPOUND: {
-       CompoundExecutor compoundExecutor = new CoumpoundExecutor(): 
+       CompoundExecutor compoundExecutor = new CompoundExecutor(this);
        return compoundExecutor.execute(node);
       }
 

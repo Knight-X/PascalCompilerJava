@@ -29,7 +29,7 @@ public class RuntimeErrorHandler
    backend.sendMessage(
           new Message(RUNTIME_ERROR,
                    new Object[] {errorCode.toString(),
-                             (Integer) node.getAttribute(LINE))});
+                             (Integer) node.getAttribute(LINE)}));
 
   if (++errorCount > MAX_ERRORS) {
        System.out.println("*** ABORTED AFTER TOO MANY RUNTIME ERRORS***");
