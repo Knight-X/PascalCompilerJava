@@ -10,6 +10,47 @@ import static wci.message.MessageType.INTERPRETER_SUMMARY;
 
 public class Excutor extends Backend
 {
+
+  protected static int executionCount;
+  protected static RuntimeErrorHandler errorHandler;
+
+  static {
+    executionCount = 0;
+    errorHandler = new RuntimeErrorHandler();
+  }
+
+  public Executor() {}
+
+  public Executor(Executor parent)
+  { 
+    super();
+  }
+
+  public RuntimeErrorHandler getErrorHandler()
+  {
+    return errorHandler;
+  }
+
+  public void process(ICode iCode, SymTabStack symTabStack)
+    throws Exception
+  {
+    this.symTabStack = symTabStack;
+    this.iCode = iCode;
+
+    ICodeNode rootNode = iCode.getRoot();
+    StatementExecutor statementExecutor = new StatementExecutor();
+    statementExecutor.executor(rootNode);
+
+    float elapsedTime = (System.currentTimeMillis() - startTime) / 1000f;
+
+    int runtimeErrors = errorHandler.getErrorCount();
+
+    sendMessage(new Message(INTERPRETER_SUMMARY,
+                new Number[] {executionCount,
+                              runtimeErrors,
+                              elapsedTime}));
+   }
+}
   public void process(ICode iCode, SymTabStack symTabStack)
   throws Exception
   {
