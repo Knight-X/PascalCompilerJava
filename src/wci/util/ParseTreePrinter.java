@@ -77,7 +77,7 @@ public class ParseTreePrinter
   {
     String saveIndentation = indentation;
 
-    identation += ident;
+    indentation += indent;
 
     Set<Map.Entry<ICodeKey, Object> attributes = node.entrySet();
 
@@ -88,7 +88,69 @@ public class ParseTreePrinter
       printAttribute(attribute.getKey().toString(), attribute.getValue());
     }
 
-    identation = saveIndentation;
+    indentation = saveIndentation;
   }
 
-  
+  private void printAttribute(String keyString, Object value)
+  {
+    boolean isSymTabEntry = value instanceof SymTabEntry;
+
+    String valueString = isSymTabEntry ? ((SymTabEntry) value).getName() : value.toString();
+
+    String text = keyString.toLowerCase() + "=\"" + valueString + "\"";
+    append(" ");
+    append(text);
+    
+
+    if (isSymTabEntry) {
+      int level = ((SymTabEntry) value).getSymTab().getNestingLevel();
+      printAttribute("LEVEL", level);
+    }
+  }
+
+  private void printChildNodes(ArrayList<ICodeNode> childNodes)
+  {
+     String saveIndentation = indentation;
+     indentation += indent;
+     
+     for (ICodeNode child : childeNodes) {
+       printNode((ICodeNodeImpl) child);
+     }
+
+     indentation = saveIndentation;
+  }
+
+
+  private void printTypeSpec(ICodeNodeImpl node)
+  {
+  }
+
+  private void append(String text)
+  {  
+    int textLength = text.length();
+    boolean lineBreak = false;
+
+    if (length + textLength > LINE_WIDTH) {
+     printLine();
+     line.append(indentation);
+     length = indentation.length();
+     lineBreak = true;
+    }
+
+    if (!(lineBreak && text.equals(" "))) {
+      line.append(text);
+      length += textLength;
+    }
+
+  }
+
+  private void printLine()
+  {
+    if (length > 0) {
+      ps.println(line);
+      line.setLength(0); 
+      length = 0;
+    }
+  }
+
+}
