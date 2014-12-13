@@ -200,7 +200,7 @@ public class ExpressionParser extends StatementParser
        }
 
        case REAL: {
-         rootNode = ICodeFactory.createICodeNode(STRING_CONSTANT);
+         rootNode = ICodeFactory.createICodeNode(REAL_CONSTANT);
          rootNode.setAttribute(VALUE, token.getValue());
          token = nextToken();
          break;
