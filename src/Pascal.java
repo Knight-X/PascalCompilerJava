@@ -216,11 +216,15 @@ public class Pascal
         "\n%,20d instructions generated." +
         "\n%,20.2f seconds total code generation time.\n";
 
+     private static final String LINE_FORMAT = ">>> AT LINE %03d\n";
+
+     private static final String ASSIGN_FORMAT = ">>> LINE %03d: %s = %s\n";
     /**
      * Listener for back end messages.
      */
     private class BackendMessageListener implements MessageListener
     {
+        private boolean firstOutputMessage = true;
         /**
          * Called by the back end whenever it produces a message.
          * @param message the message.
@@ -238,11 +242,11 @@ public class Pascal
                 }
 
                 Object body[] = (Object [])message.getBody();
-                int lineNumbeer = (Integer) body[0];
+                int lineNumber = (Integer) body[0];
                 String variableName = (String) body[1];
                 Object value = body[2];
 
-                System.out.println(ASSIGN_FORMAT, lineNumber, variableName, value);
+                System.out.printf(ASSIGN_FORMAT, lineNumber, variableName, value);
                 break;
             }
 
