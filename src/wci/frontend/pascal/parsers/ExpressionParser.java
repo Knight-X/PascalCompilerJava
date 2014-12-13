@@ -20,6 +20,11 @@ public class ExpressionParser extends StatementParser
     {
       super(parent);
     }
+    public ICodeNode parse(Token token)
+      throws Exception
+    {
+      return parseExpression(token);
+    }
 
     private static final EnumSet<PascalTokenType> REL_OPS = EnumSet.of(EQUALS, NOT_EQUALS, LESS_THAN, LESS_EQUALS, GREATER_THAN, GREATER_EQUALS);
 

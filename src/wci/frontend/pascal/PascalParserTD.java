@@ -22,6 +22,10 @@ public class PascalParserTD extends Parser
   {
     super(parent.getScanner());
   }
+   public PascalErrorHandler getErrorHandler()
+    {
+       return errorHandler;
+    }
 
   public void parse() 
     throws Exception

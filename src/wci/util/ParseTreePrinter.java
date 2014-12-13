@@ -79,7 +79,7 @@ public class ParseTreePrinter
 
     indentation += indent;
 
-    Set<Map.Entry<ICodeKey, Object> attributes = node.entrySet();
+    Set<Map.Entry<ICodeKey, Object>> attributes = node.entrySet();
 
     Iterator<Map.Entry<ICodeKey, Object>> it = attributes.iterator();
 
@@ -113,7 +113,7 @@ public class ParseTreePrinter
      String saveIndentation = indentation;
      indentation += indent;
      
-     for (ICodeNode child : childeNodes) {
+     for (ICodeNode child : childNodes) {
        printNode((ICodeNodeImpl) child);
      }
 
