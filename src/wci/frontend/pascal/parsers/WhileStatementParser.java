@@ -56,7 +56,7 @@ public class WhileStatementParser extends StatementParser
     }
 
     StatementParser statementParser = new StatementParser(this);
-    loopNode.addChild(StatementParser.parse(token));
+    loopNode.addChild(statementParser.parse(token));
 
     return loopNode;
   }
