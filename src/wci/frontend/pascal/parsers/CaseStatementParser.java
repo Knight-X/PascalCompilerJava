@@ -97,4 +97,172 @@ public class CaseStatementParser extends StatementParser
 
     branchNode.addChild(constantsNode);
 
+    parseConstantList(token, constantsNode, constantSet);
+
+    token = currentToken();
+
+    if (token.getType() == COLON) {
+
+      token = nextToken();
+    } else {
+      errorHandler.flag(token, MISSING_COLON, this);
+    }
+
+    StatementParser statementParser = new StatementParser(this);
+
+    branchNode.addChild(statementParser.parse(token));
+
+    return branchNode;
+  }
+
+  private static final EnumSet<PascalTokenType> COMMA_SET = 
+    CONSTANT_START_SET.clone();
+
+  static {
+    COMMA_SET.add(COMMA);
+    COMMA_SET.add(COLON);
+    COMMA_SET.addAll(StatementParser.STMT_START_SET);
+    COMMA_SET.addAll(StatementParser.STMT_FOLLOW_SET);
+  }
+
+
+  private void parseConstantList(Token token, ICodeNode constantsNode,
+                                HashSet<Object> constantSet)
+    throws Exception
+  {
+
+    while (CONSTANT_START_SET.contains(token.getType())) {
+
+      constantsNode.addChild(parseConstant(token, constantSet));
+
+      token = synchroize(COMMA_SET);
+
+      if (token.getType() == COMMA) {
+
+        token = nextToken();
+
+      }
+
+      else if (CONSTANT_START_SET.contains(token.getType())) {
+
+        errorHandler.flag(token, MISSING_COMMA, this);
+
+      }
+     }
+   }
+
+
+  private ICodeNode parseContant(Token token, HashSet<Object> constantSet)
+    throws Exception
+  {
+
+    TokenType sign = null;
+
+    ICodeNode constantNode = null;
+
+    token = synchronize(CONSTANT_START_SET);
+
+    TokenType tokenType = token.getType();
+
+    if ((tokenType == PLUS) || (tokenType == MINUS)) {
+
+      sign = tokenType; 
+      token = nextToken();
+
+    }
+
+    switch ((PascalTokenType) token.getType()) {
+
+      case IDENTIFIER: {
+
+        constantNode = parseIdentifierConstant(token, sign);
+        break;
+      }
+
+      case INTEGER: {
+        constantNode = parseIntegerConstant(token.getText(), sign);
+
+        break;
+      }
+
+      case STRING: {
+        constantNode = parseCharacterConstant(token, (String) token.getValue(), sign);
+
+        break;
+      }
+
+      default: {
+
+        errorHandler.flag(token, INVALID_CONSTANT, this);
+
+         break;
+      }
+
+    }
+
+    if (constantNode != null) {
+
+      Object value = constantNode.getAttributes(VALUE);
+
+      if (constantSet.contains(value)) {
+         errorHandler.flag(token, CASE_CONSTANT_REUSED, this);
+      }
+
+      else {
+        constantSet.add(value);
+      }
+    }
+
+    nextToken();
+    return constantNode;
+  }
+
+  private ICodeNode parseIdentifierConstant(Token token, TokenType sign)
+    throws Exception
+  {
+
+    errorHandler.flag(token, INVALID_CONSTANT, this);
+
+    return null;
+  }
+
+  private ICodeNode parseIntegerConstant(String value, TokenType sign)
+  {
+    ICodeNode constantNode = ICodeFactory.createICodeNode(INTEGER_CONSTANT);
+
+    int intValue = Integer.parseInt(value);
+
+    if (sign == MINUS) {
+      intValue = -intValue;
+    }
+
+    constantNode.setAttribute(VALUE, intValue);
+
+    return constantNode;
+  }
+
+  private ICodeNode parseCharacterConstant(Token token, String value, TokenType sign)
+  {
+    ICodeNode constantNode = null;
+
+    if (sign != null) {
+      errorHandler.flag(token, INVALID_CONSTANT, this);
+    }
+    else {
+      if (value.length() == 1) {
+
+        constantNode = ICodeFactory.createICodeNode(STRING_CONSTANT);
+        constantNode.setAttributes(VALUE, value);
+
+      } else {
+        errorHandler.flag(token, INVALID_CONSTANT, this);
+      }
+   }
+
+   return constantNode;
+  }
+}
+    
+
+        
    
