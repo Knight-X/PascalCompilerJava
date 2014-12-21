@@ -52,7 +52,7 @@ public class WhileStatementParser extends StatementParser
     if (token.getType() == DO) {
       token = nextToken();
     } else {
-      errorHanlder.flag(token, MISSING_DO, this);
+      errorHandler.flag(token, MISSING_DO, this);
     }
 
     StatementParser statementParser = new StatementParser(this);

@@ -1,4 +1,4 @@
- ckage wci.frontend.pascal.parsers;
+package wci.frontend.pascal.parsers;
 
 import java.util.EnumSet;
 
@@ -53,7 +53,7 @@ public class ForStatementParser extends StatementParser
 
     ICodeNode initAssignNode = assignmentParser.parse(token);
 
-    setLineNumber(initAssignNode);
+    setLineNumber(initAssignNode, targetToken);
     
     compoundNode.addChild(initAssignNode);
 
@@ -72,11 +72,11 @@ public class ForStatementParser extends StatementParser
 
     ICodeNode relOpNode = ICodeFactory.createICodeNode(direction == TO ? GT : LT);
 
-    ICodeNode controlVarNode = initAssignmNode.getChildren().get(0);
+    ICodeNode controlVarNode = initAssignNode.getChildren().get(0);
 
     relOpNode.addChild(controlVarNode.copy());
 
-    ExpressionParser expressionParser = new ExpressionParser();
+    ExpressionParser expressionParser = new ExpressionParser(this);
 
     relOpNode.addChild(expressionParser.parse(token));
 
@@ -90,7 +90,7 @@ public class ForStatementParser extends StatementParser
       errorHandler.flag(token, MISSING_DO, this);
     }
 
-    StatementParser statementParse = new StatementParser(this);
+    StatementParser statementParser = new StatementParser(this);
     loopNode.addChild(statementParser.parse(token));
 
 
@@ -98,7 +98,7 @@ public class ForStatementParser extends StatementParser
 
     nextAssignNode.addChild(controlVarNode.copy());
 
-    ICodeNode arithOpNode = ICodeFactory.crateICodeNode(direction == TO ? ADD : SUBTRACT);
+    ICodeNode arithOpNode = ICodeFactory.createICodeNode(direction == TO ? ADD : SUBTRACT);
     
     arithOpNode.addChild(controlVarNode.copy());
 
@@ -112,7 +112,7 @@ public class ForStatementParser extends StatementParser
 
     loopNode.addChild(nextAssignNode);
 
-    setLineNumber(nextAssigneNode, targetToken);
+    setLineNumber(nextAssignNode, targetToken);
 
     return compoundNode;
   }

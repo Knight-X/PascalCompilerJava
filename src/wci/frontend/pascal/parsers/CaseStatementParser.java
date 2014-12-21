@@ -1,4 +1,4 @@
- ckage wci.frontend.pascal.parsers;
+package wci.frontend.pascal.parsers;
 
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -24,7 +24,10 @@ public class CaseStatementParser extends StatementParser
 
 
   private static final EnumSet<PascalTokenType> CONSTANT_START_SET =
-    CONSTANT_START_SET.clone();
+      EnumSet.of(IDENTIFIER, INTEGER, PLUS, MINUS, STRING);
+
+  private static final EnumSet<PascalTokenType> OF_SET =
+      CONSTANT_START_SET.clone();
 
   static {
     OF_SET.add(OF);
@@ -43,7 +46,7 @@ public class CaseStatementParser extends StatementParser
 
     selectNode.addChild(expressionParser.parse(token));
 
-    token = synchronize(OF_set);
+    token = synchronize(OF_SET);
 
     if (token.getType() == OF) {
        token = nextToken();
@@ -135,7 +138,7 @@ public class CaseStatementParser extends StatementParser
 
       constantsNode.addChild(parseConstant(token, constantSet));
 
-      token = synchroize(COMMA_SET);
+      token = synchronize(COMMA_SET);
 
       if (token.getType() == COMMA) {
 
@@ -152,7 +155,7 @@ public class CaseStatementParser extends StatementParser
    }
 
 
-  private ICodeNode parseContant(Token token, HashSet<Object> constantSet)
+  private ICodeNode parseConstant(Token token, HashSet<Object> constantSet)
     throws Exception
   {
 
@@ -202,7 +205,7 @@ public class CaseStatementParser extends StatementParser
 
     if (constantNode != null) {
 
-      Object value = constantNode.getAttributes(VALUE);
+      Object value = constantNode.getAttribute(VALUE);
 
       if (constantSet.contains(value)) {
          errorHandler.flag(token, CASE_CONSTANT_REUSED, this);
@@ -252,7 +255,7 @@ public class CaseStatementParser extends StatementParser
       if (value.length() == 1) {
 
         constantNode = ICodeFactory.createICodeNode(STRING_CONSTANT);
-        constantNode.setAttributes(VALUE, value);
+        constantNode.setAttribute(VALUE, value);
 
       } else {
         errorHandler.flag(token, INVALID_CONSTANT, this);
