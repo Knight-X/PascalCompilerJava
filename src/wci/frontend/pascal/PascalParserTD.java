@@ -73,6 +73,26 @@ public class PascalParserTD extends Parser
       return errorHandler.getErrorCount();
     }
 
+    public Token synchronize(EnumSet syncSet)
+      throws Exception
+    {
+
+      Toekn token = currentToken();
+
+      if (!syncSet.contains(token.getType()) {
+          
+          errorHandler.flag(token, UNEXPECTED_TOKEN, this);
+
+          do {
+              token = nextToken();
+          } while (!(token instanceof EofToken) &&
+                   !syncSet.cootains(token.getType()));
+      }
+
+      return token;
+    }
+
+
 }
       
     
