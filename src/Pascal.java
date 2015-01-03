@@ -9,7 +9,7 @@ import wci.message.*;
 import wci.util.*;
 
 import static wci.message.MessageType.*;
-
+import static wci.intermediate.symtabimpl.SymTabKeyImpl.*;
 /**
  * <h1>Pascal</h1>
  *
@@ -51,8 +51,15 @@ public class Pascal
             source.close();
 			
             if (parser.getErrorCount() == 0) {
-              iCode = parser.getICode();
-              symTabStack = parser.getSymTabStack();
+
+                symTabStack = parser.getSymTabStack();
+
+                SymTabEntry programId = symTabStack.getProgramId();
+                iCode = (ICode) programId.getAttribute(ROUTINE_ICODE);
+
+
+            
+          
 
               if (xref) {
                 CrossReferencer crossReferencer = new CrossReferencer();

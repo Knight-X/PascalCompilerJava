@@ -13,7 +13,7 @@ import wci.intermediate.*;
 import static wci.frontend.pascal.PascalTokenType.*;
 import static wci.frontend.pascal.PascalErrorCode.*;
 import static wci.intermediate.typeimpl.TypeFormImpl.*;
-import static wci.intermeidate.symtabimpl.SymTabKeyImpl.*;
+import static wci.intermediate.symtabimpl.SymTabKeyImpl.*;
 import static wci.message.MessageType.PARSER_SUMMARY;
 
 public class PascalParserTD extends Parser
@@ -52,7 +52,7 @@ public class PascalParserTD extends Parser
     
     routineId = symTabStack.enterLocal("DummyProgramName".toLowerCase());
     routineId.setDefinition(DefinitionImpl.PROGRAM);
-    symTabStack.setProgramId(rouineId);
+    symTabStack.setProgramId(routineId);
 
     routineId.setAttribute(ROUTINE_SYMTAB, symTabStack.push());
     routineId.setAttribute(ROUTINE_ICODE, iCode);

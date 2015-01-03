@@ -52,7 +52,7 @@ public class TypeDefinitionsParser extends DeclarationsParser
     public void parse(Token token)
         throws Exception
     {
-        token = synchrozie(IDENTIFIER_SET);
+        token = synchronize(IDENTIFIER_SET);
 
         while (token.getType() == IDENTIFIER) {
             String name = token.getText().toLowerCase();
@@ -89,7 +89,7 @@ public class TypeDefinitionsParser extends DeclarationsParser
 
             if ((type != null) && (typeId != null)) {
                 if (type.getIdentifier() == null) {
-                    type.stIdentifier(typeId);
+                    type.setIdentifier(typeId);
                 }
                 typeId.setTypeSpec(type);
             }
@@ -100,7 +100,7 @@ public class TypeDefinitionsParser extends DeclarationsParser
             token = currentToken();
             TokenType tokenType = token.getType();
 
-            if (tokeType == SEMINCOLON) {
+            if (tokenType == SEMICOLON) {
                 while (token.getType() == SEMICOLON) {
                     token = nextToken();
                 }

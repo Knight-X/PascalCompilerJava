@@ -24,7 +24,7 @@ class SimpleTypeParser extends TypeSpecificationParser
     }
 
     static final EnumSet<PascalTokenType> SIMPLE_TYPE_START_SET = 
-        ConstantDefinitionParser.CONSTANT_START_SET.clone();
+        ConstantDefinitionsParser.CONSTANT_START_SET.clone();
 
     static {
         SIMPLE_TYPE_START_SET.add(LEFT_PAREN);
@@ -54,7 +54,7 @@ class SimpleTypeParser extends TypeSpecificationParser
                         return id.getTypeSpec();
                     }
                     else if ((definition != CONSTANT) && 
-                            ((definition != ENUMERATION_CONSTANT)) {
+                            ((definition != ENUMERATION_CONSTANT))) {
                         errorHandler.flag(token, NOT_TYPE_IDENTIFIER, this);
                         token = nextToken();
                         return null;

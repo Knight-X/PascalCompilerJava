@@ -19,7 +19,7 @@ public abstract class Parser implements MessageProducer
   protected Parser(Scanner scanner)
   {
     this.scanner = scanner;
-    this.iCode = null;
+
 
    }
 
@@ -28,10 +28,6 @@ public abstract class Parser implements MessageProducer
     return scanner;
   }
 
-  public ICode getICode()
-  {
-    return iCode;
-  }
 
   public SymTabStack getSymTabStack()
   {

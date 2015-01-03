@@ -57,14 +57,14 @@ public class EnumerationTypeParser extends TypeSpecificationParser
              if (tokenType == COMMA) {
                  token = nextToken();
 
-                 if (ENUM_DEFINITION_FLOOW_SET.contains(token.getType())) {
+                 if (ENUM_DEFINITION_FOLLOW_SET.contains(token.getType())) {
                      errorHandler.flag(token, MISSING_IDENTIFIER, this);
                  }
              }
              else if (ENUM_CONSTANT_START_SET.contains(tokenType)) {
                  errorHandler.flag(token, MISSING_COMMA, this);
              }
-         }while (!NUM_DEFINITION_FOLLOW_SET.contains(token.getType()));
+         }while (!ENUM_DEFINITION_FOLLOW_SET.contains(token.getType()));
 
          if (token.getType() == RIGHT_PAREN) {
              token = nextToken();
@@ -95,7 +95,7 @@ public class EnumerationTypeParser extends TypeSpecificationParser
             else {
                 constantId = symTabStack.enterLocal(name);
                 constantId.setDefinition(ENUMERATION_CONSTANT);
-                constantId.setTypeSpec(enmerationType);
+                constantId.setTypeSpec(enumerationType);
                 constantId.setAttribute(CONSTANT_VALUE, value);
                 constantId.appendLineNumber(token.getLineNumber());
                 constants.add(constantId);

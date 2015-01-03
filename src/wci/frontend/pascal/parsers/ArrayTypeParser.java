@@ -47,7 +47,7 @@ class ArrayTypeParser extends TypeSpecificationParser
     public TypeSpec parse(Token token)
         throws Exception
     {
-        TypeSpec arrayType = TypeFactory.crateType(ARRAY);
+        TypeSpec arrayType = TypeFactory.createType(ARRAY);
         token = nextToken();
 
         token = synchronize(LEFT_BRACKET_SET);
@@ -78,7 +78,7 @@ class ArrayTypeParser extends TypeSpecificationParser
     }
 
     private static final EnumSet<PascalTokenType> INDEX_START_SET =
-        SimpleTypeParser.SIMPLE_TYPE_START_SET.cloen();
+        SimpleTypeParser.SIMPLE_TYPE_START_SET.clone();
 
     static {
         INDEX_START_SET.add(COMMA);
@@ -122,7 +122,7 @@ class ArrayTypeParser extends TypeSpecificationParser
 
             else if (tokenType == COMMA) {
                 TypeSpec newElementType = TypeFactory.createType(ARRAY);
-                elementType.setAttribute(ARRAY_ELEMENT_TYPE, newElementTYpe);
+                elementType.setAttribute(ARRAY_ELEMENT_TYPE, newElementType);
                 elementType = newElementType;
 
                 token = nextToken();
@@ -144,6 +144,7 @@ class ArrayTypeParser extends TypeSpecificationParser
             return;
         }
 
+        TypeForm form = indexType.getForm();
         int count = 0;
 
         if (form == SUBRANGE) {

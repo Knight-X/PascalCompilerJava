@@ -50,7 +50,7 @@ public class VariableDeclarationsParser extends DeclarationsParser
     public void parse(Token token)
         throws Exception
     {
-        token = synchronize(IDENTIFIER_SET)
+        token = synchronize(IDENTIFIER_SET);
 
         while (token.getType() == IDENTIFIER) {
 
@@ -70,7 +70,7 @@ public class VariableDeclarationsParser extends DeclarationsParser
                 errorHandler.flag(token, MISSING_SEMICOLON, this);
             }
 
-            token = synchroniz(IDENTIFIER_SET);
+            token = synchronize(IDENTIFIER_SET);
         }
     }
 
@@ -81,7 +81,7 @@ public class VariableDeclarationsParser extends DeclarationsParser
         EnumSet.of(COLON, SEMICOLON);
 
     static {
-        IDENTIFIER_FLOOW_SET.addAll(DeclarationsParser.VAR_START_SET);
+        IDENTIFIER_FOLLOW_SET.addAll(DeclarationsParser.VAR_START_SET);
 
     }
 
@@ -108,14 +108,14 @@ public class VariableDeclarationsParser extends DeclarationsParser
                 token = nextToken();
 
                 if (IDENTIFIER_FOLLOW_SET.contains(token.getType())) {
-                    errorHandler.flag(token, MISSING_IDENTIFER, this);
+                    errorHandler.flag(token, MISSING_IDENTIFIER, this);
                 }
 
             }
             else if (IDENTIFIER_START_SET.contains(tokenType)) {
                 errorHandler.flag(token, MISSING_COMMA, this);
             }
-        }while (!IDENTIFIER_FOLLOW_SET.contains(token.getType());
+        }while (!IDENTIFIER_FOLLOW_SET.contains(token.getType()));
 
         TypeSpec type = parseTypeSpec(token);
 
@@ -169,7 +169,7 @@ public class VariableDeclarationsParser extends DeclarationsParser
             errorHandler.flag(token, MISSING_COLON, this);
         }
 
-        TypeSpecificationParsr typeSpecificationParser = 
+        TypeSpecificationParser typeSpecificationParser = 
             new TypeSpecificationParser(this);
 
         TypeSpec type = typeSpecificationParser.parse(token);

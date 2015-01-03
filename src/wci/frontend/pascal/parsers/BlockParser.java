@@ -23,7 +23,7 @@ public class BlockParser extends PascalParserTD
     public ICodeNode parse(Token token, SymTabEntry routineId)
         throws Exception
     {
-        DeclarationParser declarationParser = new DeclarationParser(this);
+        DeclarationsParser declarationParser = new DeclarationsParser(this);
         StatementParser statementParser = new StatementParser(this);
 
         declarationParser.parse(token);

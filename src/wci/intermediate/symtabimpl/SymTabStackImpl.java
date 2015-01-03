@@ -11,11 +11,22 @@ public class SymTabStackImpl
 {
 
     private int currentNestingLevel;
+    private SymTabEntry programId;
 
     public SymTabStackImpl()
     {
       this.currentNestingLevel = 0;
       add(SymTabFactory.createSymTab(currentNestingLevel));
+    }
+
+    public void setProgramId(SymTabEntry id)
+    {
+        this.programId = id;
+    }
+
+    public SymTabEntry getProgramId()
+    {
+        return programId;
     }
 
     public int getCurrentNestingLevel()
@@ -28,9 +39,33 @@ public class SymTabStackImpl
       return get(currentNestingLevel);
     }
 
+    public SymTab push()
+    {
+        SymTab symTab = SymTabFactory.createSymTab(++currentNestingLevel);
+        add(symTab);
+
+        return symTab;
+    }
+
+    public SymTab push(SymTab symTab)
+    {
+        ++currentNestingLevel;
+        add(symTab);
+
+        return symTab;
+    }
+
     public SymTabEntry enterLocal(String name)
     {
       return get(currentNestingLevel).enter(name);
+    }
+
+    public SymTab pop()
+    {
+        SymTab symTab = get(currentNestingLevel);
+        remove(currentNestingLevel--);
+
+        return symTab;
     }
 
     public SymTabEntry lookupLocal(String name)

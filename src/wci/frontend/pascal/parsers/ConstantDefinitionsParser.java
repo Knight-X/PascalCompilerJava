@@ -18,7 +18,7 @@ import static wci.intermediate.typeimpl.TypeKeyImpl.*;
 
 public class ConstantDefinitionsParser extends DeclarationsParser
 {
-    public ConstantDefinitionsParser((PascalParserTD parent)
+    public ConstantDefinitionsParser(PascalParserTD parent)
     {
         super(parent);
     }
@@ -59,7 +59,7 @@ public class ConstantDefinitionsParser extends DeclarationsParser
         while (token.getType() == IDENTIFIER) {
             String name = token.getText().toLowerCase();
 
-            SymTabEntry constantId = symTabStack.loopuoLocal(name);
+            SymTabEntry constantId = symTabStack.lookupLocal(name);
 
             if (constantId == null) {
                 constantId = symTabStack.enterLocal(name);
@@ -86,7 +86,7 @@ public class ConstantDefinitionsParser extends DeclarationsParser
             Object value = parseConstant(token);
 
             if (constantId != null) {
-                constantId.setDefinitions(CONSTANT);
+                constantId.setDefinition(CONSTANT);
                 constantId.setAttribute(CONSTANT_VALUE, value);
 
                 TypeSpec constantType = 
@@ -99,7 +99,7 @@ public class ConstantDefinitionsParser extends DeclarationsParser
             token = currentToken();
             TokenType tokenType = token.getType();
 
-            if (tokenType == SEMINCOLON) {
+            if (tokenType == SEMICOLON) {
 
                 while (token.getType() == SEMICOLON) {
                     token = nextToken();
@@ -110,7 +110,7 @@ public class ConstantDefinitionsParser extends DeclarationsParser
                 errorHandler.flag(token, MISSING_SEMICOLON, this);
             }
 
-            token = syncrhonize(IDENTIFIER_SET);
+            token = synchronize(IDENTIFIER_SET);
         }
     }
 
@@ -118,7 +118,7 @@ public class ConstantDefinitionsParser extends DeclarationsParser
         throws Exception
     {
 
-        Token sign = null;
+        TokenType sign = null;
 
         token = synchronize(CONSTANT_START_SET);
         TokenType tokenType = token.getType();
@@ -140,7 +140,7 @@ public class ConstantDefinitionsParser extends DeclarationsParser
             }
 
             case REAL: {
-                Flot value = (Float) token.getValue();
+                Float value = (Float) token.getValue();
                 nextToken();
                 return sign == MINUS ? -value : value;
             }
@@ -163,33 +163,9 @@ public class ConstantDefinitionsParser extends DeclarationsParser
         }
     }
 
-    protected Object parseIdentifierConstant(Token token, TokenType sign)
-        throws Exception
-    {
-
-        String name = token.getText().toLowerCase();
-        SymTabEntry id = symTabStack.lookup(name);
-
-        nextToken();
-
-        if (id == null) {
-            errorHandler.flag(token, IDENTIFIER_UNDEFINED, this);
-            return null;
-        }
-
-        Definition definition = id.getDefinition();
-
-        if (definition == CONSTANT) {
-            Object value = id.getAttribute(CONSTANT_VALUE);
-            id.appendLineNumber(token.getLineNumber());
-
-            if (value instanceof Integer) {
-                return sign == MINUS ? -((Integer))
-            }
             
-            protected Object parseIdentifierConstant(Token token, TokenType sign)
-            {
-    throws Exception
+    protected Object parseIdentifierConstant(Token token, TokenType sign)
+      throws Exception
     {
         
         String name = token.getText().toLowerCase();
@@ -224,7 +200,7 @@ public class ConstantDefinitionsParser extends DeclarationsParser
             }
         }
 
-        else if (defintion == ENUMERATION_CONSTANT) {
+        else if (definition == ENUMERATION_CONSTANT) {
             Object value = id.getAttribute(CONSTANT_VALUE);
             id.appendLineNumber(token.getLineNumber());
 

@@ -77,7 +77,7 @@ public class DeclarationsParser extends PascalParserTD
 
             variableDeclarationsParser.setDefinition(VARIABLE);
 
-            variableDelarationsParser.parse(token);
+            variableDeclarationsParser.parse(token);
         }
 
         token = synchronize(ROUTINE_START_SET);

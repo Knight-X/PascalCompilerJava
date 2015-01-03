@@ -23,18 +23,18 @@ public class SubrangeTypeParser extends TypeSpecificationParser
     public TypeSpec parse(Token token)
         throws Exception
     {
-        TypeSpec subrangType = TypeFactory.createType(SUBRANGE);
+        TypeSpec subrangeType = TypeFactory.createType(SUBRANGE);
 
         Object minValue = null;
         Object maxValue = null;
 
         Token constantToken = token;
-        ConstantDefinitionsParse = constantParser =
+        ConstantDefinitionsParser constantParser =
             new ConstantDefinitionsParser(this);
         minValue = constantParser.parseConstant(token);
 
         TypeSpec minType = constantToken.getType() == IDENTIFIER
-                            ? constantParser.getConstantType(constantToken);
+                            ? constantParser.getConstantType(constantToken)
                             : constantParser.getConstantType(minValue);
 
 
@@ -56,7 +56,7 @@ public class SubrangeTypeParser extends TypeSpecificationParser
                 errorHandler.flag(token, MISSING_DOT_DOT, this);
             }
 
-            token = synchroniz(ConstantDefinitionParser.CONSTANT_START_SET);
+            token = synchronize(ConstantDefinitionsParser.CONSTANT_START_SET);
 
             constantToken  = token;
             maxValue = constantParser.parseConstant(token);
@@ -69,7 +69,7 @@ public class SubrangeTypeParser extends TypeSpecificationParser
             maxValue = checkValueType(constantToken, maxValue, maxType);
 
             if ((minType == null) || (maxType == null)) {
-                errorHandler.flag(constantToken, INCOMATIBLE_TYPES, this);
+                errorHandler.flag(constantToken, INCOMPATIBLE_TYPES, this);
             }
 
             else if (minType != maxType) {
@@ -82,7 +82,7 @@ public class SubrangeTypeParser extends TypeSpecificationParser
             }
         }
         else {
-            errorHandler.flag(constantToken, INVALID_SUBRANGEE_TYPE, this);
+            errorHandler.flag(constantToken, INVALID_SUBRANGE_TYPE, this);
         }
 
         subrangeType.setAttribute(SUBRANGE_BASE_TYPE, minType);
@@ -97,14 +97,14 @@ public class SubrangeTypeParser extends TypeSpecificationParser
         if (type == null) {
             return value;
         }
-        if (type = Predefined.integerType) {
+        if (type == Predefined.integerType) {
             return value;
         }
         else if (type == Predefined.charType) {
             char ch = ((String) value).charAt(0);
-            return Character.getNumbericValue(ch);
+            return Character.getNumericValue(ch);
         }
-        else if (type.getFrom() == ENUMERATION) {
+        else if (type.getForm() == ENUMERATION) {
             return value;
         }
         else {

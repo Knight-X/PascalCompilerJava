@@ -20,7 +20,7 @@ class TypeSpecificationParser extends PascalParserTD
 
     protected TypeSpecificationParser(PascalParserTD parent)
     {
-        super(this);
+        super(parent);
     }
 
     static final EnumSet<PascalTokenType> TYPE_START_SET = 
