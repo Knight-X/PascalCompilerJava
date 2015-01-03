@@ -20,6 +20,8 @@ public class PascalParserTD extends Parser
 {
   protected static PascalErrorHandler errorHandler = new PascalErrorHandler();
 
+  private SymTabEntry routineId;
+
   public PascalParserTD(Scanner scanner)
   {
     super(scanner);
@@ -34,33 +36,44 @@ public class PascalParserTD extends Parser
        return errorHandler;
     }
 
+   public SymTabEntry getRountineId()
+   {
+       return routineId;
+   }
+
   public void parse() 
     throws Exception
   {
     
     long startTime = System.currentTimeMillis();
-    iCode = ICodeFactory.createICode();
+    ICode iCode = ICodeFactory.createICode();
+
+    Predefined.initialize(symTabStack);
+    
+    routineId = symTabStack.enterLocal("DummyProgramName".toLowerCase());
+    routineId.setDefinition(DefinitionImpl.PROGRAM);
+    symTabStack.setProgramId(rouineId);
+
+    routineId.setAttribute(ROUTINE_SYMTAB, symTabStack.push());
+    routineId.setAttribute(ROUTINE_ICODE, iCode);
+
+    BlockParser blockParser = new BlockParser(this);
+
 
     try{
         Token token = nextToken();
-        ICodeNode rootNode = null;
+        ICodeNode rootNode = blockParser.parse(token, routineId);
+        iCode.setRoot(rootNode);
+        symTabStack.pop();
 
-        if (token.getType() == BEGIN) {
-            StatementParser statementParser = new StatementParser(this); 
-            rootNode = statementParser.parse(token);
-            token = currentToken();
-        } else {
-            errorHandler.flag(token, UNEXPECTED_TOKEN, this);
+        token = currentToken();
+
+        if (token.getType() != DOT) {
+            errorHandler.flag(token, MISSING_PERIOD, this);
         }
 
-            if (token.getType() != DOT) {
-              errorHandler.flag(token, MISSING_PERIOD, this);
-        }
-          token = currentToken();
-          
-    if (rootNode != null){
-           iCode.setRoot(rootNode);
-        }
+        token = currentToken();
+
 
      float elapsedTime = (System.currentTimeMillis() - startTime ) / 1000f;
 
