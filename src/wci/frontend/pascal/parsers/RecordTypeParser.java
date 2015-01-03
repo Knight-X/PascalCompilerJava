@@ -16,13 +16,14 @@ import static wci.intermediate.typeimpl.TypeFormImpl.RECORD;
 import static wci.intermediate.typeimpl.TypeKeyImpl.*;
 
 
-
 class RecordTypeParser extends TypeSpecificationParser
 {
+
     protected RecordTypeParser(PascalParserTD parent)
     {
         super(parent);
     }
+
 
     private static final EnumSet<PascalTokenType> END_SET =
         DeclarationsParser.VAR_START_SET.clone();
@@ -45,8 +46,6 @@ class RecordTypeParser extends TypeSpecificationParser
             new VariableDeclarationsParser(this);
 
         variableDeclarationsParser.setDefinition(FIELD);
-
-        variableDeclarationsParser.setDefinition(FIELD);
         variableDeclarationsParser.parse(token);
 
         symTabStack.pop();
@@ -55,7 +54,6 @@ class RecordTypeParser extends TypeSpecificationParser
 
         if (token.getType() == END) {
             token = nextToken();
-
         } else {
             errorHandler.flag(token, MISSING_END, this);
         }

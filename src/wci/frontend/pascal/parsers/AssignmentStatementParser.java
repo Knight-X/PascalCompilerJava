@@ -1,4 +1,5 @@
 package wci.frontend.pascal.parsers;
+import java.util.EnumSet;
 
 import wci.frontend.*;
 import wci.frontend.pascal.*;
@@ -17,7 +18,13 @@ public class AssignmentStatementParser extends StatementParser
     super(parent);
   }
 
+  private static final EnumSet<PascalTokenType> COLON_EQUALS_SET =
+      ExpressionParser.EXPR_START_SET.clone();
 
+  static {
+      COLON_EQUALS_SET.add(COLON_EQUALS);
+      COLON_EQUALS_SET.addAll(StatementParser.STMT_FOLLOW_SET);
+  }
   public ICodeNode parse(Token token)
     throws Exception
   {
@@ -39,6 +46,7 @@ public class AssignmentStatementParser extends StatementParser
 
     assignNode.addChild(variableNode);
     
+    token = synchronize(COLON_EQUALS_SET);
 
     if (token.getType() == COLON_EQUALS) {
       token = nextToken();

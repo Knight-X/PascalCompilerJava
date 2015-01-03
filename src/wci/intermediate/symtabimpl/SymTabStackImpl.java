@@ -75,6 +75,14 @@ public class SymTabStackImpl
 
     public SymTabEntry lookup(String name)
     {
-      return lookupLocal(name);
+        SymTabEntry foundEntry = null;
+
+        for (int i = currentNestingLevel; (i >= 0) && (foundEntry == null); --i)
+        {
+            foundEntry = get(i).lookup(name);
+        }
+
+        return foundEntry;
     }
+    
 }
