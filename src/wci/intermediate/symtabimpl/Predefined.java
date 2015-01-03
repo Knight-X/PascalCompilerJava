@@ -55,7 +55,7 @@ public class Predefined
 
         charId = symTabStack.enterLocal("char");
         charType = TypeFactory.createType(SCALAR);
-        cahrType.setIdentifier(charId);
+        charType.setIdentifier(charId);
         charId.setDefinition(DefinitionImpl.TYPE);
 
         charId.setTypeSpec(charType);

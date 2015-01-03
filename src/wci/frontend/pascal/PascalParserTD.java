@@ -4,11 +4,16 @@ import java.util.EnumSet;
 
 import wci.frontend.*;
 import wci.frontend.pascal.parsers.*;
+import wci.intermediate.symtabimpl.*;
+import wci.intermediate.typeimpl.*;
+
 import wci.message.*;
 import wci.intermediate.*;
 
 import static wci.frontend.pascal.PascalTokenType.*;
 import static wci.frontend.pascal.PascalErrorCode.*;
+import static wci.intermediate.typeimpl.TypeFormImpl.*;
+import static wci.intermeidate.symtabimpl.SymTabKeyImpl.*;
 import static wci.message.MessageType.PARSER_SUMMARY;
 
 public class PascalParserTD extends Parser

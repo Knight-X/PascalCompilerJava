@@ -14,7 +14,7 @@ public abstract class Parser implements MessageProducer
   }
 
   protected Scanner scanner;
-  protected ICode iCode;
+
 
   protected Parser(Scanner scanner)
   {

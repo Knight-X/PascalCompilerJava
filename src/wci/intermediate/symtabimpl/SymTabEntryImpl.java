@@ -10,8 +10,9 @@ public class SymTabEntryImpl
     implements SymTabEntry
 {
     private String name;
-
+    private Definition definition;
     private SymTab symTab;
+    private TypeSpec typeSpec;
     private ArrayList<Integer> lineNumbers;
 
     public SymTabEntryImpl(String name, SymTab symTab)
@@ -31,6 +32,27 @@ public class SymTabEntryImpl
     {
       return symTab;
     }
+
+    public void setDefinition(Definition definition)
+    {
+        this.definition = definition;
+    }
+
+    public Definition getDefinition()
+    {
+        return definition;
+    }
+
+    public void setTypeSpec(TypeSpec typeSpec)
+    {
+        this.typeSpec = typeSpec;
+    }
+
+    public TypeSpec getTypeSpec()
+    {
+        return typeSpec;
+    }
+
 
     public void appendLineNumber(int lineNumber)
     {
