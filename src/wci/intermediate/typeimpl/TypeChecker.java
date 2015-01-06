@@ -21,4 +21,20 @@ public class TypeChecker
         return isInteger(type1) && isInteger(type2);
     }
 
+    public static boolean isReal(TypeSpec type)
+    {
+        return (type != null) && (type.baseType() == Predeined.realType);
+    }
 
+    public static boolean isIntegerOrReal(TypeSpec type)
+    {
+        return isInteger(type) || isReal(type);
+    }
+
+    public static boolean isAtLeastOnReal(TypeSpec type1, TypeSpec type2)
+    {
+        return (isReal(type1) && isReal(type2)) ||
+               (isReal(type1) && isInteger(type2)) ||
+               (isInteger(type1) && isReal(type2));
+
+    }
