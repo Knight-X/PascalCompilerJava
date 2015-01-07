@@ -77,6 +77,16 @@ public class ICodeNodeImpl
     return copy;
   }
 
+  public void setTypeSpec(TypeSpec typeSpec)
+  {
+      this.typeSpec = typeSpec;
+  }
+
+  public TypeSpec getTypeSpec()
+  {
+      return typeSpec;
+  }
+
   public String toString()
   {
     return type.toString();
