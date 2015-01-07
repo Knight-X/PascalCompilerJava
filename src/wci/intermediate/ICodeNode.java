@@ -8,6 +8,10 @@ public interface ICodeNode
 
   public ICodeNode getParent();
 
+  public void setTypeSpec(TypeSpec typeSpec);
+
+  public TypeSpec getTypeSpec();
+
   public ICodeNode addChild(ICodeNode node);
 
   public ArrayList<ICodeNode> getChildren();
