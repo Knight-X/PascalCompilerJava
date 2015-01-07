@@ -48,6 +48,9 @@ public class ExpressionParser extends StatementParser
     {
       ICodeNode rootNode = parseSimpleExpression(token);
 
+      TypeSpec resultType = rootNode != null ? rootNode.getTypeSpec()
+                                             : Predefined.undefinedType;
+
       token = currentToken();
       TokenType tokenType = token.getType();
 
@@ -59,10 +62,27 @@ public class ExpressionParser extends StatementParser
         opNode.addChild(rootNode);
         token = nextToken();
 
-        opNode.addChild(parseSimpleExpression(token));
+        ICodeNode simExprNode = parseSimpleExpression(token);
+
+        opNode.addChild(simExprNode);
 
         rootNode = opNode;
+
+        TypeSpec simExprType = simExprNode != null
+                                   ? simExprNode.getTypeSpec()
+                                   : Predefined.undefinedType;
+        if (TypeChecker.areComparisonCompatible(resultType, simExprType)) {
+            resultType = Predefined.booleanType;
+        }else {
+            errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
+            resultType = Predefined.undefinedType;
+        }
+
        }
+
+      if (rootNode != null) {
+          rootNode.setTypeSpec(resultType);
+      }
       return rootNode;
      }
 
@@ -80,22 +100,30 @@ public class ExpressionParser extends StatementParser
      private ICodeNode parseSimpleExpression(Token token)
        throws Exception
      {
+       Token signToken = null;
        TokenType signType = null;
 
        TokenType tokenType = token.getType();
 
        if ((tokenType == PLUS) || (tokenType == MINUS)) {
          signType = tokenType;
+         signType = token;
          token = nextToken();
        }
 
        ICodeNode rootNode = parseTerm(token);
+       TypeSpec resultType = rootNode != null ? rootNode.getTypeSpec()
+                                              : Predefined.undefinedType;
+
+       if ((signType != null) && (!TypeChecker.isIntegerOrReal(resultType))) {
+           errorHandler.flag(signToken, INCOMPATIBLE_TYPES, this);
+       }
 
        if (signType == MINUS) {
 
          ICodeNode negateNode = ICodeFactory.createICodeNode(NEGATE);
-
          negateNode.addChild(rootNode);
+         negateNode.setTypeSpec(rootNode.getTypeSpec());
          rootNode = negateNode;
        }
 
@@ -103,17 +131,54 @@ public class ExpressionParser extends StatementParser
        tokenType = token.getType();
 
        while (ADD_OPS.contains(tokenType)) {
+        TokenType operator = tokenType;
+
         ICodeNodeType nodeType = ADD_OPS_OPS_MAP.get(tokenType);
         ICodeNode opNode = ICodeFactory.createICodeNode(nodeType);
         opNode.addChild(rootNode);
 
         token = nextToken();
 
-        opNode.addChild(parseTerm(token));
+        ICodeNode termNode = parseTerm(token);
+
+        opNode.addChild(termNode);
+        TypeSpec termType = termNode != null ? termNode.getTypeSpec();
+                                             : Predefined.undefinedType;
 
         rootNode = opNode;
 
-       token = currentToken();
+        switch ((PascalTokenType) operator) {
+            case PLUS:
+            case MINUS: {
+                    if (TypeChecker.areBothInteger(resultType, termType)) {
+                        resultType = Predefined.integerType;
+                    }
+                    else if (TypeChecker.isAtLeastOneReal(resultType,
+                                                          termType)) {
+                        resultType = Predefined.realType;
+                    }
+                    else {
+                        errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
+                    }
+
+                    break;
+              }
+
+            case OR: {
+                    if (TypeChecker.areBothBoolean(resultType, termType)) {
+                        resultType = Predefined.booleanType;
+                    }
+                    else {
+                        errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
+                    }
+
+                    break;
+            }
+        }
+
+
+        rootNode.setTypeSpec(resultType);
+        token = currentToken();
 
         tokenType = token.getType();
 
@@ -140,11 +205,16 @@ public class ExpressionParser extends StatementParser
    {
      ICodeNode rootNode = parseFactor(token);
 
+     TypeSpec resultType = rootNode != null ? rootNode.getTypeSpec()
+                                            : Predefined.undefinedType;
+
      token = currentToken();
 
      TokenType tokenType = token.getType();
 
      while (MULT_OPS.contains(tokenType)) {
+
+       TokenType operator = tokenType;
 
        ICodeNodeType nodeType = MULT_OPS_OPS_MAP.get(tokenType);
 
@@ -153,7 +223,13 @@ public class ExpressionParser extends StatementParser
 
        token = nextToken();
 
-       opNode.addChild(parseFactor(token));
+       ICodeNode factorNode = parseFactory(token);
+
+       opNode.addChild(factorNode);
+
+       TypeSpec factorType = factorNode != null ? factorNode.getTypeSpec()
+                                                : Predefined.undefinedType;
+
 
        rootNode = opNode;
        
