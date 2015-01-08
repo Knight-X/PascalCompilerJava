@@ -232,6 +232,67 @@ public class ExpressionParser extends StatementParser
 
 
        rootNode = opNode;
+
+       switch ((PascalTokenType) operator) {
+
+           case STAR: {
+                IF (TypeChecker.areBothInteger(resultType, factorType)) {
+                    resultType = Predefined.integerType;
+                }
+
+                else if (TypeChecker.isAtLeastOneReal(resultType,
+                                                      factorType)) {
+                    resultType = Predefined.realType;
+                }
+                else {
+                    errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
+                }
+
+                break;
+           }
+
+           case SLASH: {
+
+                if (TypeChecker.areBothInteger(resultType, factorType) ||
+                    TypeChecker.isAtLeastOneReal(resultType, factorType))
+                {
+                    resultType = Predefined.realType;
+                }
+                else {
+                    errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
+                }
+
+                break;
+           }
+
+           case DIV:
+           case MOD: {
+                if (TypeChecker.arBothInteger(resultType, factorType)) {
+                    resultType = Predefined.integerType;
+                }
+                else {
+                    errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
+                }
+
+                break;
+           }
+
+           case AND: {
+
+                if (TypeChecker.areBothBoolean(resultType, factorType)) {
+
+                    resultType = Predefined.booleanType;
+                }
+
+                else {
+                    errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
+                }
+                break;
+           }
+
+       }
+
+       rootNode.setTypeSpec(resultType);
        
        token = currentToken();
        tokenType = token.getType();
@@ -252,30 +313,17 @@ public class ExpressionParser extends StatementParser
 
     switch ((PascalTokenType) tokenType) {
       case IDENTIFIER: {
-      
-        String name = token.getText().toLowerCase();
 
-        SymTabEntry id = symTabStack.lookup(name);
-
-        if (id == null) {
-          errorHandler.flag(token, IDENTIFIER_UNDEFINED, this);
-          id = symTabStack.enterLocal(name);
-
-        }
-
-        rootNode = ICodeFactory.createICodeNode(VARIABLE);
-        rootNode.setAttribute(ID, id);
-        id.appendLineNumber(token.getLineNumber());
-
-        token = nextToken();
-        break;
-       }
+            return parseIdentifier(token);
+      }
 
        case INTEGER: {
          rootNode = ICodeFactory.createICodeNode(INTEGER_CONSTANT);
 
          rootNode.setAttribute(VALUE, token.getValue());
          token = nextToken();
+
+         rootNode.setTypeSpec(Predefined.integerType);
          break;
        }
 
@@ -283,6 +331,8 @@ public class ExpressionParser extends StatementParser
          rootNode = ICodeFactory.createICodeNode(REAL_CONSTANT);
          rootNode.setAttribute(VALUE, token.getValue());
          token = nextToken();
+
+         rootNode.setTypeSpec(Predefined.realType);
          break;
        }
        
@@ -292,7 +342,14 @@ public class ExpressionParser extends StatementParser
          rootNode = ICodeFactory.createICodeNode(STRING_CONSTANT);
          rootNode.setAttribute(VALUE, value);
 
+         TypeSpec resultType = value.length() == 1
+                                    ? Predefined.charType
+                                    : TypeFactory.createStringType(value);
+
+
+
          token = nextToken();
+         rootNode.setTypeSpec(resultType);
          break;
        }
 
@@ -301,7 +358,8 @@ public class ExpressionParser extends StatementParser
     
          rootNode = ICodeFactory.createICodeNode(ICodeNodeTypeImpl.NOT);
 
-         rootNode.addChild(parseFactor(token));
+         ICodeNode factorNode = parseFactor(token);
+         rootNode.addChild(factorNode);
          break;
        }
 
@@ -329,6 +387,83 @@ public class ExpressionParser extends StatementParser
      }
     return rootNode;
    }
+
+
+  private ICodeNode parseIdentifier(Token token)
+      throws Exception
+  {
+      ICodeNode rootNode = null;
+
+      String name = token.getText().toLowerCase();
+      SymTabEntry id = symTabStack.lookup(name);
+
+      if (id == null) {
+
+          errorHandler.flag(token, IDENTIFIER_UNDEFINED, this);
+          id = symTabStack.enterLocal(name);
+          id.setDefinition(UNDEFINED);
+          id.setTypeSpec(Predefined.undefinedType);
+
+      }
+
+      Definition defnCode = id.getDefinition();
+
+
+      switch ((DefinitionImpl) defnCode) {
+
+          case CONSTANT: {
+                Object value = id.getAttribute(CONSTANT_VALUE);
+                TypeSpec type = id.getTypeSpec();
+
+                if (value instanceof Integer) {
+                    rootNode = ICodeFactory.createICodeNode(INTEGER_CONSTANT);
+                    rootNode.setAttribute(VALUE, value);
+                }
+                else if (value instanceof Float) {
+                    rootNode = ICodeFactory.createICodeNode(REAL_CONSTANT);
+                    rootNode.setAttribute(VALUE, value);
+                }
+                else if (value instanceof String) {
+                    rootNode = ICodeFactory.createICodeNode(STRING_CONSTANT);
+                    rootNode.setAttribute(VALUE, value);
+                }
+
+                id.appendLineNumber(token.getLineNumber());
+
+                token = nextToken();
+
+                if (rootNode != null) {
+                    rootNode.setTypeSpec(type);
+                }
+                break;
+          }
+          case ENUMERATION_CONSTANT: {
+                Object value = id.getAttribute(CONSTANT_VALUE);
+                TypeSpec type = id.getTypeSpec();
+
+                rootNode = ICodeFactory.createICodeNode(INTEGER_CONSTANT);
+
+                rootNode.setAttribute(VALUE, value);
+
+                id.appendLineNumber(token.getLineNumber());
+
+                token = nextToken();
+
+                rootNode.setTypeSpec(type);
+
+                break;
+          }
+
+          default: {
+                VariableParser variableParser = new VariableParser(this);
+
+                rootNode = variableParser.parse(token, id);
+                break;
+          }
+      }
+      return rootNode;
+  }
+
 }
 
        
