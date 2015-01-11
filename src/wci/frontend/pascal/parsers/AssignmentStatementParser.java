@@ -30,34 +30,38 @@ public class AssignmentStatementParser extends StatementParser
   {
     ICodeNode assignNode = ICodeFactory.createICodeNode(ASSIGN);
 
-    String targetName = token.getText().toLowerCase();
-    SymTabEntry targetId = symTabStack.lookup(targetName);
+    VariableParser variableParser = new VariableParser(this);
+    ICodeNode targetNode = variableParser.parse(token);
+    TypeSpec targetType = targetNode != null ? targetNode.getTypeSpec()
+                                             : Predefined.undefinedType;
 
-    if (targetId == null) {
-      targetId = symTabStack.enterLocal(targetName);
-    }
+    assignNode.addChild(targetNode);
 
-    targetId.appendLineNumber(token.getLineNumber());
-
-    token = nextToken();
-
-    ICodeNode variableNode = ICodeFactory.createICodeNode(VARIABLE);
-    variableNode.setAttribute(ID, targetId);
-
-    assignNode.addChild(variableNode);
-    
     token = synchronize(COLON_EQUALS_SET);
 
     if (token.getType() == COLON_EQUALS) {
       token = nextToken();
-    } else {
-      errorHandler.flag(token, MISSING_COLON_EQUALS, this);
+    }
+    else {
+        errorHandler.flag(token, MISSING_COLON_EQUALS, this);
     }
 
     ExpressionParser expressionParser = new ExpressionParser(this);
-    assignNode.addChild(expressionParser.parse(token));
 
+    ICodeNode exprNode = expressionParser.parse(token);
+    assignNode.addChild(exprNode);
+
+
+    TypeSpec exprType = exprNode != null ? exprNode.getTypeSpec()
+                                         : Predefined.undefinedType;
+
+    if (!TypeChecker.areAssignmentCompatible(targetType, exprType)) {
+        errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
+    }
+
+    assignNode.setTypeSpec(targetType);
     return assignNode;
+
   }
 }
 
