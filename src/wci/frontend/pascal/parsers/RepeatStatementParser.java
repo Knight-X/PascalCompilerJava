@@ -35,10 +35,19 @@ public class RepeatStatementParser extends StatementParser
     token = currentToken();
 
     ExpressionParser expressionParser = new ExpressionParser(this);
-    testNode.addChild(expressionParser.parse(token));
+    ICodeNode exprNode = expressionParser.parse(token);
+    testNode.addChild(exprNode);
 
     loopNode.addChild(testNode);
-   
+
+    TypeSpec exprType = exprNode != null ? exprNode.getTypeSpec()
+                                         : Predefined.undefinedType;
+
+    if (!TypeChecker.isBoolean(exprType)) {
+        errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
+    }
+
     return loopNode;
   }
+   
 }
