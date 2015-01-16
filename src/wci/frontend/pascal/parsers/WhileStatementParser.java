@@ -45,7 +45,15 @@ public class WhileStatementParser extends StatementParser
 
     ExpressionParser expressionParser = new ExpressionParser(this);
 
-    notNode.addChild(expressionParser.parse(token));
+    ICodeNode exprNode = expressionParser.parse(token);
+    notNode.addChild(exprNode);
+
+    TypeSpec exprType = exprNode != null ? exprNode.getTypeSpec()
+                                         : Predefined.undefinedType;
+
+    if (!TypeChecker.isBoolean(exprType)) {
+        errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
+    }
 
     token = synchronize(DO_SET);
 
