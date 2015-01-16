@@ -53,8 +53,16 @@ public class ForStatementParser extends StatementParser
 
     ICodeNode initAssignNode = assignmentParser.parse(token);
 
+    TypeSpec controlType = initAssignNode != null 
+                            ? initAssignNode.getTypeSpec()
+                            : Predefined.undefinedType;
     setLineNumber(initAssignNode, targetToken);
     
+    if (!TypeChecker.isInteger(controlType) && 
+         (controlType.getForm() != ENUMERATION)) 
+    {
+        errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
+    }
     compoundNode.addChild(initAssignNode);
 
     compoundNode.addChild(loopNode);
@@ -72,13 +80,23 @@ public class ForStatementParser extends StatementParser
 
     ICodeNode relOpNode = ICodeFactory.createICodeNode(direction == TO ? GT : LT);
 
+    relOpNode.setTypeSpec(Predefined.booleanType);
+
     ICodeNode controlVarNode = initAssignNode.getChildren().get(0);
 
     relOpNode.addChild(controlVarNode.copy());
 
     ExpressionParser expressionParser = new ExpressionParser(this);
 
-    relOpNode.addChild(expressionParser.parse(token));
+    ICodeNOde exprNode = expressionParser.parse(token);
+    relOpNode.addChild(exprNode);
+
+    TypsSpec exprType = exprNode != null ? exprNode.getTypeSpec()
+                                         : Predefined.undefinedType;
+
+    if (!TypeChecker.areAssignmentCompatible(controlType, exprType)) {
+        errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
+    }
 
     testNode.addChild(relOpNode);
     loopNode.addChild(testNode);
@@ -96,15 +114,18 @@ public class ForStatementParser extends StatementParser
 
     ICodeNode nextAssignNode = ICodeFactory.createICodeNode(ASSIGN);
 
+    nextAssignNode.setTypeSpec(controlType);
     nextAssignNode.addChild(controlVarNode.copy());
 
     ICodeNode arithOpNode = ICodeFactory.createICodeNode(direction == TO ? ADD : SUBTRACT);
     
+    arithOpNode.setTypeSpec(Predefined.integerType);
     arithOpNode.addChild(controlVarNode.copy());
 
     ICodeNode oneNode = ICodeFactory.createICodeNode(INTEGER_CONSTANT);
 
     oneNode.setAttribute(VALUE, 1);
+    oneNode.setTypeSpec(Predefined.integerType);
      arithOpNode.addChild(oneNode);
 
 
