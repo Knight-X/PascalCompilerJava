@@ -102,7 +102,7 @@ public class CaseStatementParser extends StatementParser
     return selectNode;
   }
 
-  private ICodeNode parseBranch(Token token, HashSet<Object> constantSet)
+  private ICodeNode parseBranch(Token token, TypeSpec expressionType, HashSet<Object> constantSet)
     throws Exception
   {
 
@@ -112,7 +112,7 @@ public class CaseStatementParser extends StatementParser
 
     branchNode.addChild(constantsNode);
 
-    parseConstantList(token, constantsNode, constantSet);
+    parseConstantList(token, expressionType, constantsNode, constantSet);
 
     token = currentToken();
 
@@ -141,14 +141,16 @@ public class CaseStatementParser extends StatementParser
   }
 
 
-  private void parseConstantList(Token token, ICodeNode constantsNode,
+  private void parseConstantList(Token token, TypeSpec expressionType, 
+                                ICodeNode constantsNode,
                                 HashSet<Object> constantSet)
     throws Exception
   {
 
     while (CONSTANT_START_SET.contains(token.getType())) {
 
-      constantsNode.addChild(parseConstant(token, constantSet));
+      constantsNode.addChild(parseConstant(token, expressionType,
+                                            constantSet));
 
       token = synchronize(COMMA_SET);
 
@@ -174,6 +176,7 @@ public class CaseStatementParser extends StatementParser
     TokenType sign = null;
 
     ICodeNode constantNode = null;
+    TypeSpec constantType = null;
 
     token = synchronize(CONSTANT_START_SET);
 
@@ -191,18 +194,21 @@ public class CaseStatementParser extends StatementParser
       case IDENTIFIER: {
 
         constantNode = parseIdentifierConstant(token, sign);
+        if (constantNode != null) {
+            constantType = constantNode.getTypeSpec();
+        }
         break;
       }
 
       case INTEGER: {
         constantNode = parseIntegerConstant(token.getText(), sign);
-
+        constantType = constantType.integerType;
         break;
       }
 
       case STRING: {
         constantNode = parseCharacterConstant(token, (String) token.getValue(), sign);
-
+        constantType = Predefined.charType;
         break;
       }
 
@@ -228,7 +234,13 @@ public class CaseStatementParser extends StatementParser
       }
     }
 
+    if (!TypeChecker.areComparisonCompatible(expressionType,
+                                            constantType)) {
+        errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
+    }
+
     nextToken();
+    constantNode.setTypeSpec(constantType);
     return constantNode;
   }
 
