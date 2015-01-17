@@ -43,8 +43,20 @@ public class CaseStatementParser extends StatementParser
     ICodeNode selectNode = ICodeFactory.createICodeNode(SELECT);
 
     ExpressionParser expressionParser = new ExpressionParser(this);
+    ICodeNode exprNode = expressionParser.parse(token);
+    selectNode.addChild(exprNode);
 
-    selectNode.addChild(expressionParser.parse(token));
+    TypeSpec exprType = exprNode != null ? exprNode.getTypeSpec()
+                                         : Predefined.undefinedType;
+
+    if (!TypeChecker.isInteger(exprType) &&
+        !TypsChecker.isChar(exprType) && 
+        (exprType.getForm() != ENUMERATION))
+    {
+        errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
+    }
+
+
 
     token = synchronize(OF_SET);
 
@@ -61,7 +73,7 @@ public class CaseStatementParser extends StatementParser
     while (!(token instanceof EofToken) && (token.getType() != END))
     {
 
-      selectNode.addChild(parseBranch(token, constantSet));
+      selectNode.addChild(parseBranch(token, exprType, constantSet));
 
       token = currentToken();
 
