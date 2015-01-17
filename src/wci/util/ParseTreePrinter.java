@@ -123,6 +123,30 @@ public class ParseTreePrinter
 
   private void printTypeSpec(ICodeNodeImpl node)
   {
+      TypeSpec typeSpec = node.getTypeSpec();
+
+      if (typeSpec != null) {
+          String saveMargin = indentation;
+
+          indentation += indent;
+
+          String typeName;
+
+          SymTabEntry typeId = typeSpec.getIdentifier();
+
+          if (typeId != null) {
+              typeName = typeId.getName();
+          }
+
+          else {
+              int code = typeSpec.hashCode() + typeSpec.getForm().hashCode();
+
+              typeName = "$anon_" + Integer.toHexString(code);
+          }
+
+          printAttribute("TYPE_ID", typeName);
+          indentation = saveMargin;
+      }
   }
 
   private void append(String text)
@@ -152,5 +176,7 @@ public class ParseTreePrinter
       length = 0;
     }
   }
+
+
 
 }
