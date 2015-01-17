@@ -5,12 +5,16 @@ import java.util.HashMap;
 
 import wci.frontend.*;
 import wci.frontend.pascal.*;
+import wci.intermediate.symtabimpl.*;
 import wci.intermediate.*;
 import wci.intermediate.icodeimpl.*;
+import wci.intermediate.typeimpl.*;
 
 import static wci.frontend.pascal.PascalTokenType.*;
 import static wci.frontend.pascal.PascalTokenType.NOT;
 import static wci.frontend.pascal.PascalErrorCode.*;
+import static wci.intermediate.symtabimpl.SymTabKeyImpl.*;
+import static wci.intermediate.symtabimpl.DefinitionImpl.*;
 import static wci.intermediate.icodeimpl.ICodeNodeTypeImpl.*;
 import static wci.intermediate.icodeimpl.ICodeKeyImpl.*;
 
@@ -107,7 +111,7 @@ public class ExpressionParser extends StatementParser
 
        if ((tokenType == PLUS) || (tokenType == MINUS)) {
          signType = tokenType;
-         signType = token;
+         signToken = token;
          token = nextToken();
        }
 
@@ -223,7 +227,7 @@ public class ExpressionParser extends StatementParser
 
        token = nextToken();
 
-       ICodeNode factorNode = parseFactory(token);
+       ICodeNode factorNode = parseFactor(token);
 
        opNode.addChild(factorNode);
 
@@ -267,7 +271,7 @@ public class ExpressionParser extends StatementParser
 
            case DIV:
            case MOD: {
-                if (TypeChecker.arBothInteger(resultType, factorType)) {
+                if (TypeChecker.areBothInteger(resultType, factorType)) {
                     resultType = Predefined.integerType;
                 }
                 else {

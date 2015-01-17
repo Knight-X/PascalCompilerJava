@@ -23,7 +23,7 @@ public class TypeChecker
 
     public static boolean isReal(TypeSpec type)
     {
-        return (type != null) && (type.baseType() == Predeined.realType);
+        return (type != null) && (type.baseType() == Predefined.realType);
     }
 
     public static boolean isIntegerOrReal(TypeSpec type)
@@ -31,7 +31,7 @@ public class TypeChecker
         return isInteger(type) || isReal(type);
     }
 
-    public static boolean isAtLeastOnReal(TypeSpec type1, TypeSpec type2)
+    public static boolean isAtLeastOneReal(TypeSpec type1, TypeSpec type2)
     {
         return (isReal(type1) && isReal(type2)) ||
                (isReal(type1) && isInteger(type2)) ||
@@ -89,8 +89,8 @@ public class TypeChecker
             return false;
         }
 
-        type1 = type.baseType();
-        type2 = type.baseType();
+        type1 = type1.baseType();
+        type2 = type2.baseType();
 
         TypeForm form = type1.getForm();
 

@@ -5,12 +5,14 @@ import java.util.EnumSet;
 import wci.frontend.*;
 import wci.frontend.pascal.*;
 import wci.intermediate.*;
+import wci.intermediate.symtabimpl.*;
+import wci.intermediate.typeimpl.*;
 
 import static wci.frontend.pascal.PascalTokenType.*;
 import static wci.frontend.pascal.PascalErrorCode.*;
 import static wci.intermediate.icodeimpl.ICodeNodeTypeImpl.*;
 import static wci.intermediate.icodeimpl.ICodeKeyImpl.*;
-
+import static wci.intermediate.typeimpl.TypeFormImpl.ENUMERATION;
 
 
 public class ForStatementParser extends StatementParser
@@ -88,10 +90,10 @@ public class ForStatementParser extends StatementParser
 
     ExpressionParser expressionParser = new ExpressionParser(this);
 
-    ICodeNOde exprNode = expressionParser.parse(token);
+    ICodeNode exprNode = expressionParser.parse(token);
     relOpNode.addChild(exprNode);
 
-    TypsSpec exprType = exprNode != null ? exprNode.getTypeSpec()
+    TypeSpec exprType = exprNode != null ? exprNode.getTypeSpec()
                                          : Predefined.undefinedType;
 
     if (!TypeChecker.areAssignmentCompatible(controlType, exprType)) {

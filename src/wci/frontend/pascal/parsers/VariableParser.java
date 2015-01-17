@@ -75,7 +75,7 @@ public class VariableParser extends StatementParser
         while (SUBSCRIPT_FIELD_START_SET.contains(token.getType())) {
             ICodeNode subFldNode = token.getType() == LEFT_BRACKET
                                     ? parseSubscripts(variableType)
-                                    : parseField(vairableType);
+                                    : parseField(variableType);
 
             token = currentToken();
 
@@ -83,7 +83,7 @@ public class VariableParser extends StatementParser
             variableNode.addChild(subFldNode);
         }
 
-        vairableNode.setTypeSpec(variableType);
+        variableNode.setTypeSpec(variableType);
         return variableNode;
     }
 
@@ -112,11 +112,11 @@ public class VariableParser extends StatementParser
                 TypeSpec indexType = 
                     (TypeSpec) variableType.getAttribute(ARRAY_INDEX_TYPE);
 
-                if (!TypeCheckeer.areAssignmentCompatible(indexType, exprType))                 {
+                if (!TypeChecker.areAssignmentCompatible(indexType, exprType))                 {
                     errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
                 }
 
-                subscripts.addChild(exprNode);
+                subscriptsNode.addChild(exprNode);
 
                 variableType = 
                     (TypeSpec) variableType.getAttribute(ARRAY_ELEMENT_TYPE);
@@ -156,14 +156,14 @@ public class VariableParser extends StatementParser
 
         TypeForm variableForm = variableType.getForm();
 
-        if ((tokenType == IDENTIFIER) && (variablForm == RECORD)) {
+        if ((tokenType == IDENTIFIER) && (variableForm == RECORD)) {
             SymTab symTab = (SymTab) variableType.getAttribute(RECORD_SYMTAB);
             String fieldName = token.getText().toLowerCase();
 
             SymTabEntry fieldId = symTab.lookup(fieldName);
 
             if (fieldId != null) {
-                variableType = field.getTypeSpec();
+                variableType = fieldId.getTypeSpec();
 
                 fieldId.appendLineNumber(token.getLineNumber());
 

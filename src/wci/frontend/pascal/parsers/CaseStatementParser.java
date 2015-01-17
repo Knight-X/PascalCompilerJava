@@ -6,12 +6,16 @@ import java.util.HashSet;
 import wci.frontend.*;
 import wci.frontend.pascal.*;
 import wci.intermediate.*;
+import wci.intermediate.symtabimpl.*;
+import wci.intermediate.typeimpl.*;
 
 import static wci.frontend.pascal.PascalTokenType.*;
 import static wci.frontend.pascal.PascalErrorCode.*;
 import static wci.intermediate.symtabimpl.SymTabKeyImpl.*;
+import static wci.intermediate.symtabimpl.DefinitionImpl.*;
 import static wci.intermediate.icodeimpl.ICodeNodeTypeImpl.*;
 import static wci.intermediate.icodeimpl.ICodeKeyImpl.*;
+import static wci.intermediate.typeimpl.TypeFormImpl.ENUMERATION;
 
 public class CaseStatementParser extends StatementParser
 {
@@ -50,7 +54,7 @@ public class CaseStatementParser extends StatementParser
                                          : Predefined.undefinedType;
 
     if (!TypeChecker.isInteger(exprType) &&
-        !TypsChecker.isChar(exprType) && 
+        !TypeChecker.isChar(exprType) && 
         (exprType.getForm() != ENUMERATION))
     {
         errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
@@ -169,7 +173,8 @@ public class CaseStatementParser extends StatementParser
    }
 
 
-  private ICodeNode parseConstant(Token token, HashSet<Object> constantSet)
+  private ICodeNode parseConstant(Token token, TypeSpec expressionType,
+                                HashSet<Object> constantSet)
     throws Exception
   {
 
@@ -202,7 +207,7 @@ public class CaseStatementParser extends StatementParser
 
       case INTEGER: {
         constantNode = parseIntegerConstant(token.getText(), sign);
-        constantType = constantType.integerType;
+        constantType = Predefined.integerType;
         break;
       }
 
