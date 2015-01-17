@@ -142,7 +142,7 @@ public class ExpressionParser extends StatementParser
         ICodeNode termNode = parseTerm(token);
 
         opNode.addChild(termNode);
-        TypeSpec termType = termNode != null ? termNode.getTypeSpec();
+        TypeSpec termType = termNode != null ? termNode.getTypeSpec()
                                              : Predefined.undefinedType;
 
         rootNode = opNode;
@@ -236,7 +236,7 @@ public class ExpressionParser extends StatementParser
        switch ((PascalTokenType) operator) {
 
            case STAR: {
-                IF (TypeChecker.areBothInteger(resultType, factorType)) {
+                if (TypeChecker.areBothInteger(resultType, factorType)) {
                     resultType = Predefined.integerType;
                 }
 

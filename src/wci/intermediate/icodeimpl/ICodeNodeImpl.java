@@ -17,6 +17,7 @@ public class ICodeNodeImpl
   private ICodeNodeType type;
   private ICodeNode parent;
   private ArrayList<ICodeNode> children;
+  private TypeSpec typeSpec;
 
   public ICodeNodeImpl(ICodeNodeType type)
   {

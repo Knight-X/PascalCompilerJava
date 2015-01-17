@@ -1,4 +1,4 @@
-ackage wci.frontend.pascal.parsers;
+package wci.frontend.pascal.parsers;
 
 import java.util.EnumSet;
 
