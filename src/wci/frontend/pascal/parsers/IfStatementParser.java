@@ -38,7 +38,15 @@ public class IfStatementParser extends StatementParser
     ICodeNode ifNode = ICodeFactory.createICodeNode(ICodeNodeTypeImpl.IF);
 
     ExpressionParser expressionParser = new ExpressionParser(this);
-    ifNode.addChild(expressionParser.parse(token));
+    ICodeNode exprNode = expressionParser.parse(token);
+    ifNode.addChild(exprNode);
+
+    TypeSpec exprType = exprNode != null ? exprNode.getTypeSpec()
+                                         : Predefined.undefinedType;
+
+    if (!TypeChecker.isBoolean(exprType)) {
+        errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
+    }
 
     token = synchronize(THEN_SET);
 
