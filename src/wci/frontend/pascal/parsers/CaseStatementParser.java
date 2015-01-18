@@ -244,7 +244,7 @@ public class CaseStatementParser extends StatementParser
         errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
     }
 
-    nextToken();
+    token = nextToken();
     constantNode.setTypeSpec(constantType);
     return constantNode;
   }
@@ -252,10 +252,43 @@ public class CaseStatementParser extends StatementParser
   private ICodeNode parseIdentifierConstant(Token token, TokenType sign)
     throws Exception
   {
+    ICodeNode constantNode = null;
+    TypeSpec constantType = null;
 
-    errorHandler.flag(token, INVALID_CONSTANT, this);
+    String name = token.getText().toLowerCase();
 
-    return null;
+    SymTabEntry id = symTabStack.lookup(name);
+
+    if (id == null) {
+        id = symTabStack.enterLocal(name);
+        id.setDefinition(UNDEFINED);
+        id.setTypeSpec(Predefined.undefinedType);
+        errorHandler.flag(token, IDENTIFIER_UNDEFINED, this);
+
+        return null;
+    }
+
+    Definition defnCode = id.getDefinition();
+
+    if ((defnCode == CONSTANT) || (defnCode == ENUMERATION_CONSTANT)) {
+        Object constantValue = id.getAttribute(CONSTANT_VALUE);
+
+        constantType = id.getTypeSpec();
+
+        if ((sign != null) && !TypeChecker.isInteger(constantType)) {
+            errorHandler.flag(token, INVALID_CONSTANT, this);
+        }
+
+        constantNode = ICodeFactory.createICodeNode(INTEGER_CONSTANT);
+        constantNode.setAttribute(VALUE, constantValue);
+    }
+
+    id.appendLineNumber(token.getLineNumber());
+    if (constantNode != null) {
+        constantNode.setTypeSpec(constantType);
+    }
+
+    return constantNode;
   }
 
   private ICodeNode parseIntegerConstant(String value, TokenType sign)
