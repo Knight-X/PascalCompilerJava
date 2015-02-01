@@ -47,38 +47,22 @@ public class PascalParserTD extends Parser
   {
     
     long startTime = System.currentTimeMillis();
-    ICode iCode = ICodeFactory.createICode();
+
 
     Predefined.initialize(symTabStack);
     
-    routineId = symTabStack.enterLocal("DummyProgramName".toLowerCase());
-    routineId.setDefinition(DefinitionImpl.PROGRAM);
-    symTabStack.setProgramId(routineId);
-
-    routineId.setAttribute(ROUTINE_SYMTAB, symTabStack.push());
-    routineId.setAttribute(ROUTINE_ICODE, iCode);
-
-    BlockParser blockParser = new BlockParser(this);
-
-
+ 
     try{
         Token token = nextToken();
-        ICodeNode rootNode = blockParser.parse(token, routineId);
-        iCode.setRoot(rootNode);
-        symTabStack.pop();
+        
+        ProgramParser programParser = new ProgramParser(this);
 
-        token = currentToken();
-
-        if (token.getType() != DOT) {
-            errorHandler.flag(token, MISSING_PERIOD, this);
-        }
-
+        programParser.parse(token, null);
         token = currentToken();
 
 
-     float elapsedTime = (System.currentTimeMillis() - startTime ) / 1000f;
-
-     sendMessage(new Message(PARSER_SUMMARY,
+        float elapsedTime = (System.currentTimeMillis() - startTime ) / 1000f;
+         sendMessage(new Message(PARSER_SUMMARY,
 			new Number[] {token.getLineNumber(),
 			              getErrorCount(),
                                       elapsedTime}));
