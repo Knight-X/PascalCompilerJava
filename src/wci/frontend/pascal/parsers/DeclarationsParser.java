@@ -81,5 +81,25 @@ public class DeclarationsParser extends PascalParserTD
         }
 
         token = synchronize(ROUTINE_START_SET);
+        TokenType tokenType = token.getType();
+
+        while ((tokenType == PROCEDURE) || (tokenType == FUNCTION)) {
+            DeclaredRoutineParser routineParser =
+                new DeclaredRoutineParser(this);
+            routineParser.parse(token, parentId);
+
+            token = currentToken();
+
+            if (token.getType() == SEMICOLON) {
+                while (token.getType() == SEMICOLON) {
+                    token = nextToken();
+                }
+            }
+
+            token = synchronize(ROUTINE_START_SET);
+            tokenType = token.getType();
+        }
+
+        return null;
     }
 }
